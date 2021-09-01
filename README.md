@@ -1,2 +1,1 @@
-# test
-vDSSB tutorial for gromacs users 
+# vDSSB tutorial for gromacs users 
