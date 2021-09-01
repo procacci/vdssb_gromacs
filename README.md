@@ -1,5 +1,6 @@
 # vDSSB tutorial for gromacs users 
-Step 1 <br>   
+
+Step 1    
 Step 2 <br> 
 Step 3 <br>
 Step 4 <br>
