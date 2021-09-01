@@ -1,4 +1,4 @@
-# vDSSB tutorial for gromacs users 
+# Absolute Binging Free Energy calculations on HPCs: vDSSB tutorial for gromacs users 
 
 Step 1    
 Step 2 <br> 
