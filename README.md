@@ -5,4 +5,4 @@
   <a href="step3.html"> Step 3 </a>: HREM simulations (<b> HPC </b>)  <br>
   <a href="step4.html"> Step 4 </a>: Selection of the (enhanced sampled) configurations (<b> HPC </b>) <br>
   <a href="step5.html"> Step 5 </a>:  Fast Switching Alchemical Simulations (<b> HPC</b>)<br>
-Step 6  
+  <a href="step6.html"> Step 6 </a>:   Calculation of dissociation free energy (<b> HPC </b>/local
