@@ -1,4 +1,4 @@
-# Absolute Dissociation  Free Energy calculations on HPCs: vDSSB tutorial for gromacs users 
+# Absolute Dissociation  Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users  
 
 <a href="step1.html"> Step 1 </a>: Docking  (local)     
 <a href="step2.html"> Step 2 </a>: Running <a href="https://github.com/MauriceKarrenbrock/HPC_Drug"> HPC_drug <a/> for HREM set-up (local) <br>
