@@ -10,6 +10,6 @@ The methodology is divided into six consecutive steps. For each step, we report 
 <a href="step6.html"> Step 6 </a>:   Calculation of dissociation free energy (<b>HPC/local</b>)<br>
   
 <hr>
- Marina Macchiagodena, Maurice Karrenbrock, Marco Pagliai, Piero Procacci <br>
- Dipartimento di Chimica "Ugo Schiff", Università degli Studi di Firenze, Via della Lastruccia 3, 50019 Sesto Fiorentino, Italy
+<font size="2"> Marina Macchiagodena, Maurice Karrenbrock, Marco Pagliai, Piero Procacci <br>
+ Dipartimento di Chimica "Ugo Schiff", Università degli Studi di Firenze, Via della Lastruccia 3, 50019 Sesto Fiorentino, Italy</font>
   
