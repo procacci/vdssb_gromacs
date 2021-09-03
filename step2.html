@@ -1,53 +1,60 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<h2>Step 2:  <a href="https://github.com/MauriceKarrenbrock/HPC_Drug">HPC_drug</a> for HREM set-up (local) </h2>
 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users | vdssb_gromacs</title>
-<meta name="generator" content="Jekyll v3.9.0" />
-<meta property="og:title" content="Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="test pages" />
-<meta property="og:description" content="test pages" />
-<link rel="canonical" href="https://procacci.github.io/vdssb_gromacs/" />
-<meta property="og:url" content="https://procacci.github.io/vdssb_gromacs/" />
-<meta property="og:site_name" content="vdssb_gromacs" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users" />
-<script type="application/ld+json">
-{"headline":"Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users","description":"test pages",
-"url":"https://procacci.github.io/vdssb_gromacs/","@type":"WebSite","name":"vdssb_gromacs","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
+HPC_Drug is a python middleware conceived to prepare the input setup/enviroment  for the computational
+<a href="step3.html"> Step 3 </a> on a HPC facility, consisting in the
+enhanced sampling of the bound and unbound states using Hamiltonian
+Replica Exchange.  HPC_Drug requires <a href="https://docs.conda.io/en/latest/miniconda.html#linux-installers"> miniconda </a>. Installation instructions for HPC_Drug are detailed
+in the <a href="hpcdrug.pdf"> documentation </a> at the GitHub
+repository <a href=="https://github.com/MauriceKarrenbrock/HPC_Drug">
+  HPC_drug </a>. <br>
 
-    <link rel="stylesheet" href="/vdssb_gromacs/assets/css/style.css?v=16c48c577b78999daacffb7c89c7e831c9ca80b9">
-    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+After installation, to use HPC_Drug it is necessary to
+activate the HPC_DRUG environment with:
+<pre>
+  conda activate HPCDrug
+</pre>  
+To run HPC_Drug just type the following command using the input file <a href="hpc_input.html">  <code> hpc_input.txt </code> </a> :
 
-<!-- Setup Google Analytics -->
+<pre>
+  python /HPCDrugINSTALLDIRECTORY/main.py hpc_input.txt
+</pre>
+
+where <code> HPCDrugINSTALLDIRECTORY </code> is the PATH where
+HPC_Drug is installed.  The <a href"hpc_input.html"> <code>
+hpc_input.txt </code> </a> contains information about pdb file name
+for the complex (in our case <a href="complex_ligand.pdb"> <code>
+complex_ligand.pdb </code> </a>, see <a href="step1.html"> Step
+1 </a>), path, HREM options, box dimensions, water model, and so
+on. According to the HPC_Drug specifications given in the provided
+<a href=hpc_input.html> <code> hpc_input.txt </code> </a> , the pdb file <code> complex_ligand.pdb </code> (generated in <a href=step1.html> Step 1 </a>) <b> must </b> reside in the
+directory from where the python HPC_Drug is launched.<br> 
+
+HPC_Drug will take some time. Once the command has completed its job,
+in the end-user work directory there will be
+intermediate <a href="https://manual.gromacs.org/"> <code>
+GROMACS </code> </a> files due to optimization and equilibration runs,
+force field parameter/topological files of the ligand and the receptor
+and <b> two folders </b>.  The two folders, named <b> <code>
+3clp_HREM_OUT </code> </b> and <b> <code> LIG_only_ligand_HREM_OUT</code></b>, one
+for the bound and one for the un-bound state, contain <i> all the
+necessary files </i> to run the HREM simulation on the HPC platform
+with <code> GROMACS </code>.  <br> In SI.zip attached to the JCIM
+note, we provide the two reference folders obtained for the case study
+<a href="pfizer.jpg"> PF-07321332 </a> in complex with <a href="3clpro.jpg"> 3CLpro <a/>. These HPC_Drig generated directory
+can also be found at the <a href="https://zenodo.org/record/5139374">
+Zenodo repository </a>.
 
 
+<br><br>
 
-<!-- You can set your favicon here -->
-<!-- link rel="shortcut icon" type="image/x-icon" href="/vdssb_gromacs/favicon.ico" -->
+<b> N.B.:</b> In the current release, HPC_Drug
+requires <a href="http://www1.chim.unifi.it/orac/primadorac/">
+primadorac </a> to generate the ligand parameterization with the general <a href="https://flore.unifi.it/retrieve/handle/2158/1149419/383121/ms_revised.pdf"> GAFF2 </a> 
+force field for organic compounds. To install primadorac download the
+latest version of
+the <a href="http://www1.chim.unifi.it/orac/orac.6_0_1.tar.gz"> orac
+</a> code and, after untarring the archive, follow
+the <a href="http://www1.chim.unifi.it/orac/BUILDING"> installation
+instructions <a/>.
 
-<!-- end custom head snippets -->
-
-  </head>
-  <body>
-    <div class="container-lg px-3 my-5 markdown-body">
-      
-      <!-- <h1><a href="https://procacci.github.io/vdssb_gromacs/">vdssb_gromacs</a></h1> -->
-      
-
-      <h1 id="step-1-:-Docking">Step 2: HPC_drug for HREM set-up (local)</h1>
-
-
-      
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" 
-            crossorigin="anonymous"></script>
-    <script>anchors.add();</script>
-  </body>
-</html>
+  
