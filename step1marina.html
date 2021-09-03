@@ -1,1 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users | vdssb_gromacs</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="test pages" />
+<meta property="og:description" content="test pages" />
+<link rel="canonical" href="https://procacci.github.io/vdssb_gromacs/" />
+<meta property="og:url" content="https://procacci.github.io/vdssb_gromacs/" />
+<meta property="og:site_name" content="vdssb_gromacs" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users" />
+<script type="application/ld+json">
+{"headline":"Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users","description":"test pages",
+"url":"https://procacci.github.io/vdssb_gromacs/","@type":"WebSite","name":"vdssb_gromacs","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/vdssb_gromacs/assets/css/style.css?v=16c48c577b78999daacffb7c89c7e831c9ca80b9">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/vdssb_gromacs/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <!-- <h1><a href="https://procacci.github.io/vdssb_gromacs/">vdssb_gromacs</a></h1> -->
+      
+
+      <h1 id="step-1-:-Docking">Step 1: Docking (local)</h1>
+
+     
+    
+    Docking study between ligand (PF-07321332) \bb{ligand.pdb} and receptor (3CL$^{\rm pro}$, domain I+II),
+    \bb{3clc.pdb} is performed using Autodock4\cite{Autodock} with the script \bb{docking.bash}. 
+
+\begin{alltt}
+    {\bf{docking.bash -l ligand -r 3clc -x -10.55 -y 20.65 -z 66.75 -p 60}}
+\end{alltt}
+  
+The calculation runs 50 docking experiments using the Lamarckian genetic algorithm with
+    the center of mass of the fully flexible ligand placed within a 22.5 \AA~ (60 grid points, \textbf{-p 60},
+    spaced 0.375 {\AA}) side-length cubic box centered at the receptor active site (\textbf{-x -10.55 -y 20.65 -z 66.75}).
+    Up to 2.5 million energy evaluations are performed for each experiment. The results are clustered using a tolerance
+    of 2.0 \AA. The lowest energy docked conformation of the lowest energy cluster is the ``best-docked" conformation.
+    The complex structure of ligand (``best-docked") and protein, \br{complex\_ligand.pdb\_OUT}, is the starting structure for HPC\_Drug. 
+
+For help about docking script, just issue the previous command without arguments ({\bf{docking.bash}}).
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" 
+            crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>
+
 
