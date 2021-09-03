@@ -51,7 +51,9 @@
 \begin{alltt}
     {\bf{docking.bash -l ligand -r 3clc -x -10.55 -y 20.65 -z 66.75 -p 60}}
 \end{alltt}
-  
+The wrapper needs as mandatory arguments the ligand and receptor pdb files (with no extension). In the example 
+      above we have specified the coordinates of the box center as those of corresponding to the midpoint of a vector connecting the S(CYS145) and
+      NE(HIS41) atoms of the 3CLpro catalytic dyad.   
 The calculation runs 50 docking experiments using the Lamarckian genetic algorithm with
     the center of mass of the fully flexible ligand placed within a 22.5 \AA~ (60 grid points, \textbf{-p 60},
     spaced 0.375 {\AA}) side-length cubic box centered at the receptor active site (\textbf{-x -10.55 -y 20.65 -z 66.75}).
