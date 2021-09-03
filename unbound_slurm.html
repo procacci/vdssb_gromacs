@@ -1,0 +1,24 @@
+<pre>
+#!/bin/bash
+#SBATCH --job-name test 
+#SBATCH -N1 --ntasks-per-node=4
+#SBATCH --cpus-per-task=32
+#SBATCH --ntasks-per-socket=2
+#SBATCH --time=24:00:00
+#SBATCH --gres=gpu:4
+#SBATCH --nodes=8
+
+#load gromacs module
+module load profile/archive autoload gromacs/2019.6
+export OMP_NUM_THREADS=32
+export OMP_PLACES=threads
+
+#set up for GPUdirect
+export GMX_GPU_DD_COMMS=true 
+export GMX_GPU_PME_PP_COMMS=true
+export GMX_FORCE_UPDATE_DEFAULT_GPU=true
+
+
+
+mpirun -n 32 mdrun_mpi_plumed -v -plumed empty_plumed.dat -replex 100 -hrex -multidir BATTERY0/scaled0  BATTERY0/scaled1  BATTERY0/scaled2  BATTERY0/scaled3  BATTERY0/scaled4  BATTERY0/scaled5  BATTERY0/scaled6  BATTERY0/scaled7  BATTERY1/scaled0  BATTERY1/scaled1  BATTERY1/scaled2  BATTERY1/scaled3  BATTERY1/scaled4  BATTERY1/scaled5  BATTERY1/scaled6  BATTERY1/scaled7  BATTERY2/scaled0  BATTERY2/scaled1  BATTERY2/scaled2  BATTERY2/scaled3  BATTERY2/scaled4  BATTERY2/scaled5  BATTERY2/scaled6  BATTERY2/scaled7  BATTERY3/scaled0  BATTERY3/scaled1  BATTERY3/scaled2  BATTERY3/scaled3  BATTERY3/scaled4  BATTERY3/scaled5  BATTERY3/scaled6  BATTERY3/scaled7  -s HREM.tpr 
+</pre>
