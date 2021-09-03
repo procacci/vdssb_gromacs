@@ -1,0 +1,10 @@
+<pre>
+#!/bin/bash
+module load profile/archive autoload gromacs/2019.6
+mkdir conf    
+
+for i in {0..3}; do
+          echo "0" | gmx trjconv -f BATTERY$i/scaled0/traj_comp.xtc -s BATTERY$i/scaled0/HREM.tpr -pbc mol -ur  compact -b 3000 -skip 5 -sep  -o conf/conf"$i"_.gro -box 3.00000 3.00000 3.00000 -center
+done
+</pre>
+ 
