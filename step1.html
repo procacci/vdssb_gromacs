@@ -49,5 +49,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" 
             crossorigin="anonymous"></script>
     <script>anchors.add();</script>
+    Docking study between ligand (PF-07321332) \bb{ligand.pdb} and receptor (3CL$^{\rm pro}$, domain I+II),
+    \bb{3clc.pdb} is performed using Autodock4\cite{Autodock} with the script \bb{docking.bash}. 
+
+\begin{alltt}
+    {\bf{docking.bash -l ligand -r 3clc -x -10.55 -y 20.65 -z 66.75 -p 60}}
+\end{alltt}
+  
+The calculation runs 50 docking experiments using the Lamarckian genetic algorithm with
+    the center of mass of the fully flexible ligand placed within a 22.5 \AA~ (60 grid points, \textbf{-p 60},
+    spaced 0.375 {\AA}) side-length cubic box centered at the receptor active site (\textbf{-x -10.55 -y 20.65 -z 66.75}).
+    Up to 2.5 million energy evaluations are performed for each experiment. The results are clustered using a tolerance
+    of 2.0 \AA. The lowest energy docked conformation of the lowest energy cluster is the ``best-docked" conformation.
+    The complex structure of ligand (``best-docked") and protein, \br{complex\_ligand.pdb\_OUT}, is the starting structure for HPC\_Drug. 
+
+For help about docking script, just issue the previous command without arguments ({\bf{docking.bash}}).
+    
   </body>
 </html>
