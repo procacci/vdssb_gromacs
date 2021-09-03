@@ -21,8 +21,7 @@ For the unbound state, we do
   echo "0" | gmx trjconv -f BATTERY$i/scaled0/traj_comp.xtc -s BATTERY$i/scaled0/HREM.tpr -pbc mol -ur  compact -b 3000 -skip 5 -sep  -o conf/conf"$i"_.gro -box 3.00000 3.00000 3.00000 -center  
   done
 </pre> These commands extract the target state configurations for the PF-3CLpro complex generated in the <a href="step3.html"> Step 3 </a> and store them
-(in <code> gro </code> format) in a <code> conf </code> subdirectory.
-
+(in <code> gro </code> format) in a <code> conf </code> subdirectory.<br>
 
     These operations can also be done using simple scripts for the <a href="get_bound.html"> bound state </a>
     and <a href="get_unbound.html"> unbound state </a>, available in the SI.zip attached to the JCIM paper.<br>
