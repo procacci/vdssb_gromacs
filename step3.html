@@ -76,6 +76,19 @@ of 8-replica exchange simulation with torsional trempering of the full
 ligand.<br>
 <br>
 <br>
+<b> N.B.(1):</b> On the HPC platforms, <code> GROMACS </code> is
+usually made available by issuing a specific <code> module
+load </code> directive prior to submission or directly into the batch
+submission script (see e.g. the bound-state
+SLURM <a href="bound_slurm.html"> script </a>).  The HREM execution
+requires GROMACS to be patched with PLUMED. If the GROMACS-PLUMED
+module is not available on the HPC, then the user must compile and
+patch GROMACS with PLUMED on the HPC before submission, generating his/her own
+<code> gmx_mpi </code> executable, and change the
+SLURM script specifying the full path of the PLUMED-patched <code> gmx_mpi </code>
+command.  Compiling and patching GROMACS with PLUMED is described <a href="https://www.plumed.org/doc-v2.6/user-doc/html/_installation.html"> here </a> (section <b> Patching your MD code </b>)<br><br>
 
-<b> N.B.:</b> The SLURM files (for <a href="bound_slurm.html"> bound-state </a> run  and <a href="unbound_slurm.html"> unbound-state </a> run) must be hacked and adapted to the specific HPC
-platform job scheduling/accounting system by the end-user. In the <a href="https://zenodo.org/record/5139374"> Zenodo </a> repository, a <a href="https://www.jlab.org/hpc/PBS/qsub.html"> PBS </a> script for batch submission is also provided.<br>  
+
+<b> N.B.(2):</b> The provided SLURM files (for <a href="bound_slurm.html"> bound-state </a> run  and <a href="unbound_slurm.html"> unbound-state </a> run) <b> must </b> be hacked and adapted to the specific HPC
+platform job scheduling/accounting system by the end-user. In the <a href="https://zenodo.org/record/5139374"> Zenodo </a> repository, a <a href="https://www.jlab.org/hpc/PBS/qsub.html"> PBS </a> script for batch submission is also provided.<br>   
+
