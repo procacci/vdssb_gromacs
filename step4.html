@@ -20,8 +20,19 @@ For the unbound state, we do
   for i in {0..3}; do\
   echo "0" | gmx trjconv -f BATTERY$i/scaled0/traj_comp.xtc -s BATTERY$i/scaled0/HREM.tpr -pbc mol -ur  compact -b 3000 -skip 5 -sep  -o conf/conf"$i"_.gro -box 3.00000 3.00000 3.00000 -center  
   done
-</pre> These commands extract the target state configurations for the PF-3CLpro complex generated in the <a href="step3.html"> Step 3 </a> and store them
-(in <code> gro </code> format) in a <code> conf </code> subdirectory.<br>
+</pre>
+These
+commands extract the target state configurations for the PF-3CLpro
+complex generated in the <a href="step3.html"> Step 3 </a> and store
+them (in <code> gro </code> format) in a <code> conf </code>
+Now execute the
+script <a href="addwater_sh.html"> <code>addwater.sh</code> </a>(also
+provided in the SI.zip archive attachged to the JCIM note) in the
+directory unbound.  The script combines the HREM-sampled gas-phase
+configurations with a box of equilibrated water in standard
+conditions, generating a directory <code>gro_lw</code> containing the
+starting configurations for the NS unbound state ligand growth.  
+subdirectory.<br><br>
 
     These operations can also be done using simple scripts for the <a href="get_bound.html"> bound state </a>
     and <a href="get_unbound.html"> unbound state </a>, available in the SI.zip attached to the JCIM paper.<br>
@@ -31,6 +42,15 @@ for the bound and unbound state requires few seconds.<br>
 <br>
 
 
-<b> N.B.: </b> The printing frequency (and hence the number of
+<b> N.B.(1): </b> The printing frequency (and hence the number of
 decorrelated enhaced-sampled configurations in the target states) is
-specified in the HPC_Drug-generated <a href="hrem_files.html"><code>mdp</code>  GROMACS input files</a>  for the HREM simulations, also available at the vDSSB <a href="https://zenodo.org/record/5139374"> Zenodo <a/> repository. 
+specified in the
+HPC_Drug-generated <a href="hrem_files.html"><code>mdp</code> GROMACS
+input files</a> for the HREM simulations, also available at the
+vDSSB <a href="https://zenodo.org/record/5139374"> Zenodo <a/>
+repository. <br>
+  
+<b> N.B(2)</b>: In addwater.sh the number 3072, 3139 are relative to
+our example.  3072 is the number of atoms in the hpc_drug provided
+equilibrated water box.  3139 is the total number of water+ligand
+atoms (3072+67 in our model).

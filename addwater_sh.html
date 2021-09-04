@@ -1,0 +1,10 @@
+#!/bin/bash
+mkdir gro_lw
+tail -3073 only_water_tip3p.gro > boxwater
+head -2 only_water_tip3p.gro > hwater
+((j=0)); 
+for i in conf/conf*.gro; do
+     ((j=j+1))
+     awk '{if (NF == 6) print }' $i > tmp  
+     cat hwater tmp boxwater | awk '{gsub("3072", "3139", $0);print}' > gro_lw/confw$j.gro
+done
