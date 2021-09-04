@@ -1,3 +1,4 @@
+<pre>
 #!/bin/bash
 mkdir gro_lw
 tail -3073 only_water_tip3p.gro > boxwater
@@ -8,3 +9,4 @@ for i in conf/conf*.gro; do
      awk '{if (NF == 6) print }' $i > tmp  
      cat hwater tmp boxwater | awk '{gsub("3072", "3139", $0);print}' > gro_lw/confw$j.gro
 done
+</pre>
