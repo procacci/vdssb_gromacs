@@ -1,53 +1,74 @@
-<!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<h2> Step 5: Fast Switching Alchemical Simulations (HPC) </h2>
 
-<!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users | vdssb_gromacs</title>
-<meta name="generator" content="Jekyll v3.9.0" />
-<meta property="og:title" content="Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="test pages" />
-<meta property="og:description" content="test pages" />
-<link rel="canonical" href="https://procacci.github.io/vdssb_gromacs/" />
-<meta property="og:url" content="https://procacci.github.io/vdssb_gromacs/" />
-<meta property="og:site_name" content="vdssb_gromacs" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users" />
-<script type="application/ld+json">
-{"headline":"Absolute Dissociation Free Energy calculations on HPCs: vDSSB tutorial for GROMACS users","description":"test pages",
-"url":"https://procacci.github.io/vdssb_gromacs/","@type":"WebSite","name":"vdssb_gromacs","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
+Once the starting phase-points have been generated in <a href="step4.html"> Step 4 </a>, we are ready
+to launch thesecond major computational and massively parallel stage
+in the vDSSB approach, namely the swarm of the bound state annihilation
+trajectories and the swarm of the unbound state growth
+trajectories.
 
-    <link rel="stylesheet" href="/vdssb_gromacs/assets/css/style.css?v=16c48c577b78999daacffb7c89c7e831c9ca80b9">
-    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+<h3> Bound state </h3> 
 
-<!-- Setup Google Analytics -->
+The annihilation trajectory are generated, in a sub-directory <code>
+fsdam </code> , to be created by the end-user of the bound state
+directory containing the HREM data (<code>3clp_HREM_OUT</code>) and by
+the application script <code> maketprQ.sh </code> provided in the
+SI.zip archive attached to the JCIM note.  In the specific example of
+the the complex PF-07321332-3CLpro, the script generates 384 folders
+(<code>fsdam/b</code><i>i</i>) containing the GROMACS <code>tpr</code>
+file to switch off the ligand atomic charges in 0.375 ns, starting
+from the configurations generated in Step 4.<br>
 
+The fast switching simulations are submitted on the HPC using the
+batch submission
+script <a href="bound_submit_slr.html"><code>submit.slr</code></a> (also
+provided in the SI.zip archive attached to the JCIM note) which allows
+<br>
+<ol> 
+<li> to switch off the atomic charges in 384 parallel FS trajectories
+  according to the tpr files generated with <a href="bound_Q_sh.html"><code>maketprQ.sh </code> </a>;
+<li>  to generate the new tpr files in each of the <code>fsdam/b</code><i>i</i> folders using as starting point the
+      <code>confout.gro</code> configuration files generated in Step 4;
+<li> to turn off the LJ ligand-environment interactions in 0.750
+  ns.
+</ol>
+<br>
 
+<code> maketprQ.sh </code> and <code>submit.slr</code> use
+the <code>mdp</code> files <a href="bound_transitionQ_mdp.html">
+transitionQ_mdp </a> and <a href="bound_transitionvdw_mdp.html">
+transitionvdw.mdp </a> also provided in SI.zip attached to the JCIM
+note.<br>
+The bound state ligand annihilation job requires about two wall
+clock time hours on the Marconi100 HPC platform.
 
-<!-- You can set your favicon here -->
-<!-- link rel="shortcut icon" type="image/x-icon" href="/vdssb_gromacs/favicon.ico" -->
+<h3> Unbound state </h3> 
 
-<!-- end custom head snippets -->
+Using the bash script <a href="unbound_maketprvdw_sh.html">
+maketprvdw.sh <a/> (also provided in the SI.zip attached to JCIM
+note), the <code>tpr</code> GROMACS files to perform unbound fast
+switching alchemical simulations are generated in
+the <code>fsdam</code> user-created subdirectory of the main HREM
+directory for the unbound state <code>
+LIG_only_ligand_HREM_OUT</code>.<br>
 
-  </head>
-  <body>
-    <div class="container-lg px-3 my-5 markdown-body">
-      
-      <!-- <h1><a href="https://procacci.github.io/vdssb_gromacs/">vdssb_gromacs</a></h1> -->
-      
+The script creates for 192 folders (<code>fsdam/u</code><i>i</i>
+containing the <code>tpr</code> files to switch on the LJ ligand-water
+interactions in 0.360 ns, starting from the configurations generated
+      in <a href="step4.html">Step 4</a>.
+      <br>
+The simulations are submitted
+      using <a href="unbound_submit_slr.html"><code>submit.slr</code> </a> which allows:
+<ol>
+<li> to switch on  the LJ ligand-water
+  interactions using the <code>tpr</code> files generated with
+  <code>maketprvdw.sh</code>;
+  <li> to generate the new <code>tpr</code> files using as starting point the <code>confout.gro</code>
+    configuration file of previous <a href="step4.html"> Step 4</a>;
+<li>to turn on ligand atomic
+  charges in 0.160 ns.
+  </ol>
 
-      <h1 id="step-1-:-Docking">Step 5: Fast Switching Alchemical Simulations</h1>
-
-
-      
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" 
-            crossorigin="anonymous"></script>
-    <script>anchors.add();</script>
-  </body>
-</html>
+<code>maketprvdw.sh</code> and <code>submit.slr</code> use the mdp
+files <a href="unbound_transitionvdw_mdp.html"> <code>transitionvdw.mdp</code></a> and <a href="unbound_transitionQ_mdp.html"><code>transitionQ.mdp</code></a> provided in SI.zip attached to the JCIM note.
+The unbound ligand growth required few wall clock minutes on the Marconi100
+HPC cluster.
