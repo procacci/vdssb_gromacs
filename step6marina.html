@@ -45,12 +45,11 @@
 
      
     
-<p style="text-align:justify"></p> 
-In the previous <a href="step5.html"> Step 5 <a>, we have generated
+<p style="text-align:justify">In the previous <a href="step5.html"> Step 5 <a>, we have generated
 in <i> each </i> of the 384 bound folders
-(<code>3clp_HREM_OUT/fsdam/b</code><i>i</i>, with 1 < i < 384) and
+	    (<code>3clp_HREM_OUT/fsdam/b<i>i</i></code>, with 1 < <i>i</i> < 384) and
 in <i> each </i> of the 192 the unbound folders
-(<code>LIG_only_ligand_HREM_OUT/fsdam/u</code><i>i</i>, with 1< i
+(<code>LIG_only_ligand_HREM_OUT/fsdam/u<i>i</i></code>, with 1<  <i>i</i>
 <192) two <code>dhdl.xvg</code> files, namely <code>dhdlQ.xvg</code>
 and <code>dhdlvdw.xvg</code>, relative to electrostatic and LJ
 ligand-environment interactions, respectively.<br>
@@ -62,23 +61,23 @@ script <a href="works_bash.html"><code>works.bash</code> </a> which returns
 estimates are based
 on <a href="https://aip.scitation.org/doi/10.1063/1.4918558"> Gaussian
 mixtures </a> (one, two and three components) and the Jarzynski
-estimate.<br> 
+	estimate.</p><br> 
 
-untar the <a href="6_bin.tar.gz">bin<a/> archive in the parent
+Untar the <a href="6_bin.tar.gz">bin<a/> archive in the parent
 directory (<code>USER_SCRATCH</code>) where you copied the bound and
-      unbound dir directories (see step 3), and do
+      unbound dir directories (see <a href="step5.html"> Step 3 <a>), and do:
       <pre>
 	cd USER_SCRATCH
 	cd bin/em
 	make
 	</pre>
-jump back to the parent directory USER_SCRATCH and launch from this directory the
+Then, jump back to the parent directory USER_SCRATCH and launch from this directory the
 works.bash script as
       <pre>
 	bin/works.bash PF-3clpro 
      </pre>	
-      PF-3clpro is the user-defined name for the project. the output
-      of the program should be the following
+      PF-3clpro is the user-defined name for the project. The output
+      of the program should be the following:
 <pre>
 lj bound done
 qq bound done
@@ -87,12 +86,12 @@ qq unbound done
  DG1= 2.0  2.2 DG2=  1.5  4.5 DG3=  3.9  4.7 DGj=  8.6  0.9
 </pre><br>
 
-The last line  refer to the four estimates of the dissociation free energy
-(in kcal/mol) for the complex PF-3CLpro (the second numer is the 95% confidence
+<p style="text-align:justify">The last line  refer to the four estimates of the dissociation free energy
+	(in kcal/mol) for the complex PF-3CL<sup>pro</sup> (the second number is the 95% confidence
 interval). The first three estimates, <code> DG1, DG2, DG3</code> have
 been computed using the <code>em</code> program (based on the
 <a href="https://doi.org/10.1002/widm.1135"> Expectation Maximization
-algorithm </a>) where the bound and unbound vDSSB convolution work
+algorithm</a>) where the bound and unbound vDSSB convolution work
 distribution have been fitted using Gaussian mixtures with 1 to 3
 components. The large confidence interval for these EM-based estimate denotes
 poor fitting suggesting that the convolution work distribution is
@@ -101,7 +100,7 @@ numbers (8.6 0.9) refers to the Jarzynski estimate, which is
 asymptotically exact and is taken as the <b> more reliable estimate </b> in the
   present case.
   The script generates in a subdirectory <code>Results</code> a series of <a href="6_files.tar.gz"> files </a> with the basename <code>PF-3clpro</code>
-  containing the salient processed data for the PF-3CLpro example.<br><br>
+  containing the salient processed data for the PF-3CL<sup>pro</sup> example.<br><br>
 
       To calculate the volume correction to dissociation free energy,
 the script <a href="VOLcor_bash.html"> <code>VOLcor.bash</code></a> can be 
@@ -114,7 +113,7 @@ include the <code>script Qcor.sh</code> for the finite-size correction
 applying to charged ligands. Such correction dose not apply to
 PF-3CLpro as the ligand bears no net charge. For further technical details on the usage of these scripts
 see the README files in the <code>6_post</code> directory of the
-SI.zip archive attached to the JCIM note.
+	SI.zip archive attached to the JCIM note.</p>
  
   
     </div>
