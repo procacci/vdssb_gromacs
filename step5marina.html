@@ -45,29 +45,28 @@
 
      
     
-      <p style="text-align:justify"> </p>
-Once the starting phase-points have been generated in <a href="step4.html"> Step 4</a>, we are ready
+<p style="text-align:justify">Once the starting phase-points have been generated in <a href="step4.html"> Step 4</a>, we are ready
 to launch the second major computational and massively parallel stage
 in the vDSSB approach, namely the swarm of the bound state annihilation
 trajectories and the swarm of the unbound state growth
-trajectories.
+trajectories.</p>
 
 <h3> Bound state </h3> 
 
-The annihilation trajectories are generated in a sub-directory <code>
-fsdam </code> to be created by the end-user of the bound state
+<p style="text-align:justify">The annihilation trajectories are generated in a sub-directory <code>
+fsdam</code> to be created by the end-user of the bound state
 directory containing the HREM data (<code>3clp_HREM_OUT</code>) and by
 the application script <code> maketprQ.sh </code> provided in the
 SI.zip archive attached to the JCIM note. In the specific example of
       the the complex PF-07321332-3CL<sup>pro</sup>, the script generates 384 folders
-(<code>fsdam/b</code><i>i</i>) containing the GROMACS <code>tpr</code>
+(<code>fsdam/b<i>i</i></code>) containing the GROMACS <code>tpr</code>
 file to switch off the ligand atomic charges in 0.375 ns, starting
 from the configurations generated in Step 4.<br>
 
 The fast switching simulations are submitted on the HPC using the
 batch submission
 script <a href="bound_submit_slr.html"><code>submit.slr</code></a> (also
-provided in the SI.zip archive attached to the JCIM note) which allows
+  provided in the SI.zip archive attached to the JCIM note) which allows:</p>
 <br>
 <ol> 
 <li> to switch off the atomic charges in 384 parallel FS trajectories
