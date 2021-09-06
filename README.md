@@ -6,7 +6,6 @@ The methodology is divided into six consecutive steps. For each step, we report 
 <a href="step2.html"> Step 2 </a>: Running <a href="https://github.com/MauriceKarrenbrock/HPC_Drug"> HPC_drug <a/> for HREM set-up (<b>local</b>) <br>
 <b> <a href="step3.html"> Step 3 </a></b>: HREM simulations (<b>HPC</b>)  <br>
 <a href="step4.html"> Step 4 </a>: Selection of the (enhanced sampled) configurations (<b>HPC</b>) <br>
-<a href="step4marina.html"> Step 4 </a>: Selection of the (enhanced sampled) configurations (<b>HPC</b>) <br>
 <b> <a href="step5marina.html"> Step 5 </a></b>:  Fast Switching Alchemical Simulations (<b>HPC</b>)<br>
 <b> <a href="step5.html"> Step 5 </a></b>:  Fast Switching Alchemical Simulations (<b>HPC</b>)<br>
 <a href="step6.html"> Step 6 </a>:   Calculation of dissociation free energy (<b>HPC/local</b>)<br>
