@@ -63,9 +63,14 @@ directory at the HPC front-end.<br>
 limited. In this case it may be necessary to copy the two HREM
 directories to the HPC scratch area prior to execution, as the present
 computational Step 3 will generate several tens of GB of data on
-the HPC. <br> 
+the HPC:<br>
+  <pre>
+cp USERHOME/3clp_HREM USER_SCRATCH/bound
+cp USERHOME/LIG_only_ligand_HREM USER_SCRATCH/unbound
+</pre>
+where <code>USER_SCRATCH</code> is the user scratch area on the HPC.
 
-In each of the two folders, you will find a script file named <code>
+In each of the two folders <code>bound</code> and <code>unbound </code>, you will find a script file named <code>
 MAKETPRFILES.sh</code>, one for the <a href="bound.html"> bound
 state</a> run (ligand annihilation in thye complex) and one for the
 <a href=unbound.html> unbound state</a> run (ligand growth in the
@@ -95,16 +100,14 @@ Marconi100</a> HPC platform (CINECA), equipped with 4 Nvidia VOLTA
   GPU per node.</p> <br> On Marconi100, the jobs are submitted independently with
 the commands:
 <pre>
-  cd USER_SCRATCH/3clp_HREM_OUT
+  cd USER_SCRATCH/bound
   ./MAKETPRFILES.sh 
   sbatch  HREM_input.slr
   
-  cd USER_SCRATCH/LIG_only_ligand_HREM_OUT
+  cd USER_SCRATCH/unbound
   ./MAKETPRFILES.sh 
   sbatch  HREM_input.slr   
 </pre>
-<p style="text-align:justify">where <code> USER_SCRATCH </code> is the user directory on the HPC scratch area where
-the two HPC_Drug-generated directories have been copied. 
 The <a href="bound_slurm.html"> bound-state</a>
 and <a href="unbound_slurm.html"> unbound-state</a> jobs requests 36
 nodes (144 Nvidia VOLTA GPUs) and 8 nodes (32 Nvidia VOLTA GPU),
