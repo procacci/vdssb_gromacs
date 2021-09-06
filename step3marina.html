@@ -45,7 +45,7 @@
 Copy the two directories <code>
   3clp_HREM_OUT </code> and <code> LIG_only_ligand_HREM_OUT</code></b> from
 your workstation to the remote HPC working directory. E.g. from the working directory
-where you launched the HPC_Drug command in <a href="step2.html"> Step 2 </a>,  just issue 
+where you launched the HPC_Drug command in <a href="step2.html"> Step 2</a>,  just issue 
 
 <pre>
   scp -r 3clp_HREM_OUT user@hpcaddress:USERHOME
@@ -67,31 +67,31 @@ the HPC. <br>
 
 In each of the two folders, you will find a script file named <code>
 MAKETPRFILES.sh</code>, one for the <a href="bound.html"> bound
-state </a> run (ligand annihilation in thye complex) and one for the
-<a href=unbound.html> unbound state </a> run (ligand growth in the
+state</a> run (ligand annihilation in thye complex) and one for the
+<a href=unbound.html> unbound state</a> run (ligand growth in the
 solvent).  This scripts serve to generate all GROMACS <code>
 tpr </code> files that are necessary to run the HREM simulations on
 the HPC using the HPC_Drug-generated mdp and top and
-gro <a href="https://zenodo.org/record/5139374"> files </a>
+gro <a href="https://zenodo.org/record/5139374"> files</a>
   in <a href="step2.html"> Step 2</a>.</p><br>
 
 <p style="text-align:justify">Once you execute interactively the <code> MAKETPRFILES.sh</code>
 scripts on the HPC_Drug-generated HREM directories, you are ready to
 submit you parallel jobs for vDSSB enhanced sampling on the HPC.
-To this end, in <a href="step2.html"> Step 2 </a>, HPC_Drug also
+To this end, in <a href="step2.html"> Step 2</a>, HPC_Drug also
 generated, in each of the two directories
 <code>
   3clp_HREM_OUT </code> and <code>
 LIG_only_ligand_HREM_OUT</code></b>, two tentative batch files for HPC
 submission, based on the syntax of the
-<a href="https://slurm.schedmd.com/sbatch.html"> SLURM </a> workload
+<a href="https://slurm.schedmd.com/sbatch.html"> SLURM</a> workload
 manager.  These two SLURM submission files,
-for <a href="bound_slurm.html"> bound-state </a>
-and <a href="unbound_slurm.html"> unbound-state </a>, afford the
+for <a href="bound_slurm.html"> bound-state</a>
+and <a href="unbound_slurm.html"> unbound-state</a>, afford the
 enhanced sampling of the vDSSB end-state for the complex
 PF-07321332-3CL<sup>pro</sup> on the
 heterogeneous <a href="https://www.hpc.cineca.it/hardware/marconi100">
-Marconi100 </a> HPC platform (CINECA), equipped with 4 Nvidia VOLTA
+Marconi100</a> HPC platform (CINECA), equipped with 4 Nvidia VOLTA
   GPU per node.</p> <br> On Marconi100, the jobs are submitted independently with
 the commands:
 <pre>
@@ -105,9 +105,9 @@ the commands:
 </pre>
 <p style="text-align:justify">where <code> USER_SCRATCH </code> is the user directory on the HPC scratch area where
 the two HPC_Drug-generated directories have been copied. 
-The <a href="bound_slurm.html"> bound-state </a>
-and <a href="unbound_slurm.html"> unbound-state </a> jobs requests 36
-nodes (144 Nvidia VOLTA GPUs) and 8 nodes (32 Nvidia VOLTA3 GPU),
+The <a href="bound_slurm.html"> bound-state</a>
+and <a href="unbound_slurm.html"> unbound-state</a> jobs requests 36
+nodes (144 Nvidia VOLTA GPUs) and 8 nodes (32 Nvidia VOLTA GPU),
 respectively.  The job relative to the bound state produces about 142
 ns on the target state in 24 wall clock hours, running six replicates
 of 24-replica exchange simulation involving a <i> hot-zone </i>  including the
@@ -122,20 +122,20 @@ of 8-replica exchange simulation with torsional trempering of the full
 usually made available by issuing a specific <code> module
 load </code> directive prior to submission or directly into the batch
 submission scripts (see e.g. the bound-state
-SLURM <a href="bound_slurm.html"> script </a>).  The HREM execution
+SLURM <a href="bound_slurm.html"> script</a>).  The HREM execution
 requires GROMACS to be patched with PLUMED. If the GROMACS-PLUMED
 module is not available on the HPC, then the user must compile and
 patch GROMACS with PLUMED on the HPC before submission, generating his/her own
 <code> gmx_mpi </code> executable, and change the
 SLURM script specifying the full path of the PLUMED-patched <code> gmx_mpi </code>
 command.   Compiling and patching GROMACS with PLUMED is described <a href="https://www.plumed.org/doc-v2.6/user-doc/html/_installation.html">
-  here </a> (section <b> Patching your MD code </b>). </p><br><br>
+  here</a> (section <b> Patching your MD code </b>). </p><br><br>
 
 
-<p style="text-align:justify"><b> N.B.(2):</b> The provided SLURM files (for <a href="bound_slurm.html"> bound-state </a> run  and <a href="unbound_slurm.html"> 
-  unbound-state </a> run) <b> must </b> be hacked and adapted to the specific HPC
-platform job scheduling/accounting system by the end-user. In the <a href="https://zenodo.org/record/5139374"> Zenodo </a>
-repository, a <a href="https://www.jlab.org/hpc/PBS/qsub.html"> PBS </a> script for batch submission is also provided.</p><br>  
+<p style="text-align:justify"><b> N.B.(2):</b> The provided SLURM files (for <a href="bound_slurm.html"> bound-state</a> run  and <a href="unbound_slurm.html"> 
+  unbound-state</a> run) <b> must </b> be hacked and adapted to the specific HPC
+platform job scheduling/accounting system by the end-user. In the <a href="https://zenodo.org/record/5139374"> Zenodo</a>
+repository, a <a href="https://www.jlab.org/hpc/PBS/qsub.html"> PBS</a> script for batch submission is also provided.</p><br>  
 
   
     </div>
