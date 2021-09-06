@@ -71,8 +71,8 @@ script <a href="bound_submit_slr.html"><code>submit.slr</code></a> (also
 <ol> 
 <li> to switch off the atomic charges in 384 parallel FS trajectories
   according to the tpr files generated with <a href="bound_Q_sh.html"><code>maketprQ.sh</code></a>;
-<li>  to generate the new tpr files in each of the <code>fsdam/b</code><i>i</i> folders using as starting point the
-      <code>confout.gro</code> configuration files generated in Step 4;
+<li>  to generate the new tpr files in each of the <code>fsdam/b<i>i</i></code> folders using as starting point the
+      <code>confout.gro</code> configuration file of previous run;
 <li> to turn off the LJ ligand-environment interactions in 0.750
   ns.
 </ol>
@@ -88,15 +88,15 @@ clock time hours on the Marconi100 HPC platform.
 
 <h3> Unbound state </h3> 
 
-Using the bash script <a href="unbound_maketprvdw_sh.html">
+<p style="text-align:justify">Using the bash script <a href="unbound_maketprvdw_sh.html">
 maketprvdw.sh</a> (also provided in the SI.zip attached to JCIM
 note), the <code>tpr</code> GROMACS files to perform unbound fast
 switching alchemical simulations are generated in
 the <code>fsdam</code> user-created subdirectory of the main HREM
 directory for the unbound state <code>
-LIG_only_ligand_HREM_OUT</code>.<br>
+  LIG_only_ligand_HREM_OUT</code>.</p><br>
 
-The script creates for 192 folders (<code>fsdam/u</code><i>i</i>
+The script creates for 192 folders (<code>fsdam/u<i>i</i></code>)
 containing the <code>tpr</code> files to switch on the LJ ligand-water
 interactions in 0.360 ns, starting from the configurations generated
       in <a href="step4.html">Step 4</a>.
@@ -104,20 +104,19 @@ interactions in 0.360 ns, starting from the configurations generated
 The simulations are submitted
       using <a href="unbound_submit_slr.html"><code>submit.slr</code></a> which allows:
 <ol>
-<li> to switch on  the LJ ligand-water
+<li> to switch on the LJ ligand-water
   interactions using the <code>tpr</code> files generated with
   <code>maketprvdw.sh</code>;
   <li> to generate the new <code>tpr</code> files using as starting point the <code>confout.gro</code>
-    configuration file of previous <a href="step4.html"> Step 4</a>;
+    configuration file of previous run>;
 <li>to turn on ligand atomic
   charges in 0.160 ns.
   </ol>
 
-<code>maketprvdw.sh</code> and <code>submit.slr</code> use the mdp
-files <a href="unbound_transitionvdw_mdp.html"> <code>transitionvdw.mdp</code></a> and <a href="unbound_transitionQ_mdp.html"><code>transitionQ.mdp</code></a>
-provided in SI.zip attached to the JCIM note.
-The unbound ligand growth required few wall clock minutes on the Marconi100
-HPC cluster.
+<p style="text-align:justify"><code>maketprvdw.sh</code> and <code>submit.slr</code> use the mdp
+files <a href="unbound_transitionvdw_mdp.html"><code>transitionvdw.mdp</code></a> and <a href="unbound_transitionQ_mdp.html"><code>transitionQ.mdp</code></a>
+provided in SI.zip attached to the JCIM note. The unbound ligand growth required few wall clock minutes on the Marconi100
+  HPC cluster.</p>
   
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" 
