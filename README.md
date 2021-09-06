@@ -8,7 +8,7 @@ The methodology is divided into six consecutive steps. For each step, we report 
 <a href="step4.html"> Step 4 </a>: Selection of the (enhanced sampled) configurations (<b>HPC</b>) <br>
 <b> <a href="step5.html"> Step 5 </a></b>:  Fast Switching Alchemical Simulations (<b>HPC</b>)<br>
 <a href="step6.html"> Step 6 </a>:   Calculation of dissociation free energy (<b>HPC/local</b>)<br>
-  
+<a href="step6marina.html"> Step 6 </a>:   Calculation of dissociation free energy (<b>HPC/local</b>)<br>
 <hr>
 <font size="2"> Marina Macchiagodena, Maurice Karrenbrock, Marco Pagliai, Piero Procacci <br>
  Dipartimento di Chimica "Ugo Schiff", Università degli Studi di Firenze, Via della Lastruccia 3, 50019 Sesto Fiorentino, Italy <br>
