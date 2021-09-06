@@ -1,0 +1,10 @@
+<pre>
+#!/bin/bash
+for i in {0..5}; do
+         cp bound/BATTERY$i/scaled0/pullx.xvg ./pullx$i.xvg
+         grep -v "@\|#" pullx$i.xvg >> pull.xvg 
+done
+rm pullx?.xvg 
+awk '{x+=10*$2; x2+=100*$2^2}END{com=x/NR; sig=sqrt(x2/NR-(x/NR)^2); vol= 4*3.14*(2*sig)^3/3;  dv=0.595*log(vol/1661); print com,sig,vol,dv}' pull.xvg
+</pre>
+ 
