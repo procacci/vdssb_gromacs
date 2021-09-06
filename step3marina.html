@@ -59,7 +59,7 @@ directory at the HPC front-end.<br>
 <b> Now login to your HPC account.</b> <br>
 <br>
 
-On most HPC platforms, disk quotas on non volatile storage are
+<p style="text-align:justify"> On most HPC platforms, disk quotas on non volatile storage are
 limited. In this case it may be necessary to copy the two HREM
 directories to the HPC scratch area prior to execution, as the present
 computational Step 3 will generate several tens of GB of data on
@@ -73,9 +73,9 @@ solvent).  This scripts serve to generate all GROMACS <code>
 tpr </code> files that are necessary to run the HREM simulations on
 the HPC using the HPC_Drug-generated mdp and top and
 gro <a href="https://zenodo.org/record/5139374"> files </a>
-in <a href="step2.html"> Step 2</a>.<br>
+  in <a href="step2.html"> Step 2</a>.</p><br>
 
-Once you execute interactively the <code> MAKETPRFILES.sh</code>
+<p style="text-align:justify">Once you execute interactively the <code> MAKETPRFILES.sh</code>
 scripts on the HPC_Drug-generated HREM directories, you are ready to
 submit you parallel jobs for vDSSB enhanced sampling on the HPC.
 To this end, in <a href="step2.html"> Step 2 </a>, HPC_Drug also
@@ -89,11 +89,11 @@ manager.  These two SLURM submission files,
 for <a href="bound_slurm.html"> bound-state </a>
 and <a href="unbound_slurm.html"> unbound-state </a>, afford the
 enhanced sampling of the vDSSB end-state for the complex
-PF-07321332-3CLpro on the
+PF-07321332-3CL<sup>pro</sup> on the
 heterogeneous <a href="https://www.hpc.cineca.it/hardware/marconi100">
 Marconi100 </a> HPC platform (CINECA), equipped with 4 Nvidia VOLTA
-GPU per node.<br> On Marconi100, the jobs are submitted independently with
-the commands
+  GPU per node.</p> <br> On Marconi100, the jobs are submitted independently with
+the commands:
 <pre>
   cd USER_SCRATCH/3clp_HREM_OUT
   ./MAKETPRFILES.sh 
@@ -103,7 +103,7 @@ the commands
   ./MAKETPRFILES.sh 
   sbatch  HREM_input.slr   
 </pre>
-where <code> USER_SCRATCH </code> is the user directory on the HPC scratch area where
+<p style="text-align:justify">where <code> USER_SCRATCH </code> is the user directory on the HPC scratch area where
 the two HPC_Drug-generated directories have been copied. 
 The <a href="bound_slurm.html"> bound-state </a>
 and <a href="unbound_slurm.html"> unbound-state </a> jobs requests 36
@@ -115,10 +115,10 @@ ligand and nearby residues. The job relative to the unbound state requests
 8 nodes (32 Nvidia VOLTA GPUs) and produces 32
 ns on the target state in 5/6 wall clock hours, running four replicates
 of 8-replica exchange simulation with torsional trempering of the full
-ligand.<br>
+  ligand.</p><br>
 <br>
 <br>
-<b> N.B.(1):</b> On the HPC platforms, <code> GROMACS </code> is
+<p style="text-align:justify"><b> N.B.(1):</b> On the HPC platforms, <code> GROMACS </code> is
 usually made available by issuing a specific <code> module
 load </code> directive prior to submission or directly into the batch
 submission scripts (see e.g. the bound-state
@@ -129,13 +129,13 @@ patch GROMACS with PLUMED on the HPC before submission, generating his/her own
 <code> gmx_mpi </code> executable, and change the
 SLURM script specifying the full path of the PLUMED-patched <code> gmx_mpi </code>
 command.   Compiling and patching GROMACS with PLUMED is described <a href="https://www.plumed.org/doc-v2.6/user-doc/html/_installation.html">
-  here </a> (section <b> Patching your MD code </b>)<br><br>
+  here </a> (section <b> Patching your MD code </b>). </p><br><br>
 
 
-<b> N.B.(2):</b> The provided SLURM files (for <a href="bound_slurm.html"> bound-state </a> run  and <a href="unbound_slurm.html"> 
+<p style="text-align:justify"><b> N.B.(2):</b> The provided SLURM files (for <a href="bound_slurm.html"> bound-state </a> run  and <a href="unbound_slurm.html"> 
   unbound-state </a> run) <b> must </b> be hacked and adapted to the specific HPC
 platform job scheduling/accounting system by the end-user. In the <a href="https://zenodo.org/record/5139374"> Zenodo </a>
-repository, a <a href="https://www.jlab.org/hpc/PBS/qsub.html"> PBS </a> script for batch submission is also provided.<br>  
+repository, a <a href="https://www.jlab.org/hpc/PBS/qsub.html"> PBS </a> script for batch submission is also provided.</p><br>  
 
   
     </div>
