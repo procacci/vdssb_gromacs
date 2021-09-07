@@ -1,10 +1,10 @@
 <pre>
+#!/bin/bash
 if [ $# -eq 0 ] ; then 
    echo "provide project name"
    exit
 fi    
 dire=$1
-#!/bin/bash
 for i in {0..5}; do
          cp bound/BATTERY$i/scaled0/pullx.xvg ./pullx$i.xvg
          grep -v "@\|#" pullx$i.xvg >> pull.xvg 
