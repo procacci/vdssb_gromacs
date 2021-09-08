@@ -47,9 +47,9 @@
     
 <p style="text-align:justify">In the previous <a href="step5.html"> Step 5 <a>, we have generated
 in <i> each </i> of the 384 bound folders
-	(<code>3clp_HREM_OUT/fsdam/b<i>i</i></code>, with <code>1 <  <i>i</i> < 384</code>) and
+	(<code>bound/fsdam/b<i>i</i></code>, with <code>1 <  <i>i</i> < 384</code>) and
 in <i> each </i> of the 192 the unbound folders
-(<code>LIG_only_ligand_HREM_OUT/fsdam/u<i>i</i></code>, with <code>1<  <i>i</i>
+(<code>unbound/fsdam/u<i>i</i></code>, with <code>1<  <i>i</i>
 	<192</code>) two <code>dhdl.xvg</code> files, namely <code>dhdlQ.xvg</code>
 and <code>dhdlvdw.xvg</code>, relative to electrostatic and LJ
 ligand-environment interactions, respectively.<br>
@@ -87,7 +87,7 @@ qq unbound done
 </pre><br>
 
 <p style="text-align:justify">The last line  refer to the four estimates of the dissociation free energy
-	(in kcal/mol) for the complex PF-3CL<sup>pro</sup> (the second number is the 95% confidence
+	(in kcal/mol) for the complex PF-07321332-3CL<sup>pro</sup> (the second number is the 95% confidence
 interval). The first three estimates, <code> DG1, DG2, DG3</code> have
 been computed using the <code>em</code> program (based on the
 <a href="https://doi.org/10.1002/widm.1135"> Expectation Maximization
@@ -100,17 +100,17 @@ numbers (8.6 0.9) refers to the Jarzynski estimate, which is
 asymptotically exact and is taken as the <b> more reliable estimate </b> in the
   present case.
   The script generates in a subdirectory <code>Results</code> a series of <a href="step6/6_files.tar.gz"> files </a> with the basename <code>PF-3clpro</code>
-	containing the salient processed data for the PF-3CL<sup>pro</sup> example.</p><br>
+	containing the salient processed data for the PF-07321332-3CL<sup>pro</sup> example.</p><br>
      <p style="text-align:justify"> To calculate the volume correction to dissociation free energy,
 the script <a href="step6/VOLcor_bash.html"> <code>VOLcor.bash</code></a> can be 
 used. It acts on the <code>pullx.xvg</code> files
 (see <a href="https://zenodo.org/record/5139374"> Zenodo <a/>
 repository) generated in the target state replica of each BATTERY of the
-bound state, saving the correction to the <code>Results</code> directory. For the PF-3CL<sup>pro</sup> complex the correction should be equal
+bound state, saving the correction to the <code>Results</code> directory. For the PF-07321332-3CL<sup>pro</sup> complex the correction should be equal
 to -2.8 kcal/mol. In the SI.zip attached to the JCIM note we also
 include the <code>script Qcor.sh</code> for the finite-size correction
 applying to charged ligands. Such correction dose not apply to
-PF-3CL<sup>pro</sup> as the ligand bears no net charge. For further technical details on the usage of these scripts
+PF-07321332-3CL<sup>pro</sup> as the ligand bears no net charge. For further technical details on the usage of these scripts
 see the README files in the <code>6_post</code> directory of the
 	SI.zip archive attached to the JCIM note.</p>
  
