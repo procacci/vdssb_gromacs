@@ -1,0 +1,31 @@
+<pre>
+options:
+ CENTER -->      x =  y =  z =
+ grid =  0.375    npts = 40    rounds = 50
+ Flexible residues -->  
+
+This script find best docking pose of a ligand to a receptor using Autodock4 
+
+ Syntax: docking.bash  -l ligand -r receptor  [ opt ]
+          where  'ligand' assumes that file ligand.pdb exist
+                 'receptor' assumes that file receptor.pdb exist
+          
+          Options:
+          -x xcord -y ycord -z zcord 
+          Specifies the ocking center on the receptor
+          
+          -n nrounds
+          Specifies the number of Docking rounds (default 50)
+          
+          -g gridspace
+          Specifies 40x40x40 grid spacing (default 0.375) 
+          -p NP 
+          Specifies  NP x NP x NP point with def grid spacing (default 0.375) 
+          -f list 
+          Specifies flexible residues in the protein (list must be enclosed in ellypsis) 
+          Example:  docking.bash -l lig -r rec [..] -f "ARG4_GLU290"  
+          -d dlg-file 
+           read the dlg file and produce best docked complex and best 10 dockes states 
+
+</pre>
+		     
