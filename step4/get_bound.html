@@ -1,0 +1,14 @@
+<pre>
+#!/bin/bash
+# extract confs generated in step 3 for the PF-3CLpro complex
+
+module load profile/lifesc autoload gromacs/2019.6
+
+mkdir conf
+
+# loop on batteries dirs
+
+for i in {0..5}; do
+          echo "0" | gmx trjconv -f /BATTERY$i/scaled0/traj_comp.xtc -s /BATTERY$i/scaled0/HREM.tpr -pbc mol -ur  compact -b 2000 -skip 8 -sep -o conf/conf"$i"_.pdb 
+done
+</pre>
