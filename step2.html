@@ -47,7 +47,7 @@
 prepare the input setup/enviroment for the computational <a href="step3.html"> Step 3</a> on a HPC facility, consisting in the
 enhanced sampling of the bound and unbound states using Hamiltonian Replica Exchange (HREM).
 HPC_Drug requires <a href="https://docs.conda.io/en/latest/miniconda.html#linux-installers"> miniconda</a>.
-Installation instructions for HPC_Drug are detailed in the <a href="hpcdrug.pdf"> documentation</a> at the GitHub
+Installation instructions for HPC_Drug are detailed in the <a href="step2/hpcdrug.pdf"> documentation</a> at the GitHub
 repository <a href=="https://github.com/MauriceKarrenbrock/HPC_Drug"> HPC_drug</a>. </p> <br>
 
 After installation, to use HPC_Drug it is necessary to activate the HPC_Drug environment with:
@@ -55,20 +55,20 @@ After installation, to use HPC_Drug it is necessary to activate the HPC_Drug env
   conda activate HPC_Drug
 </pre>  
 
-To run HPC_Drug just type the following command using the input file <a href="hpc_input.html"> <code> hpc_input.txt</code></a> :
+To run HPC_Drug just type the following command using the input file <a href="step2/hpc_input.html"> <code> hpc_input.txt</code></a> :
 
 <pre>
   python /HPCDrugINSTALLDIRECTORY/main.py hpc_input.txt
 </pre>
 
 <p style="text-align:justify"> where <code> HPCDrugINSTALLDIRECTORY</code> is the PATH where
-HPC_Drug is installed.  The <a href"hpc_input.html"><code>
+HPC_Drug is installed.  The <a href"step2/hpc_input.html"><code>
 hpc_input.txt</code></a> contains information about pdb file name
-for the complex (in our case <a href="complex_ligand.pdb"><code>
+for the complex (in our case <a href="step1/complex_ligand.pdb"><code>
 complex_ligand.pdb</code></a>, see <a href="step1.html"> Step
 1</a>), path, HREM options, box dimensions, water model, and so
 on. According to the HPC_Drug specifications given in the provided
-<a href=hpc_input.html><code> hpc_input.txt</code></a>, the pdb file <code> complex_ligand.pdb </code> 
+<a href=step2/hpc_input.html><code> hpc_input.txt</code></a>, the pdb file <code> complex_ligand.pdb </code> 
 (generated in <a href=step1.html> Step 1</a>)<b> must </b> reside in the
 directory from where the python HPC_Drug is launched.</p> <br> 
 
@@ -79,12 +79,12 @@ GROMACS</code></a> files due to optimization and equilibration runs,
 force field parameter/topological files of the ligand and the receptor
 and <b> two folders</b>.  The two folders, named <b> <code>
 3clp_HREM_OUT</code> </b> and <b><code>LIG_only_ligand_HREM_OUT</code></b>, one
-for the bound and one for the unbound state, contain <a href="hrem_files.html"> all the
+for the bound and one for the unbound state, contain <a href="step2/hrem_files.html"> all the
 necessary files </a> to run the HREM simulation on the HPC platform
 with <code> GROMACS</code>. </p> <br> 
   
 <p style="text-align:justify"> In SI.zip attached to the JCIM note, we provide the two reference folders obtained for the case study
-<a href="pfizer.jpg"> PF-07321332</a> in complex with <a href="3clpro.jpg"> 3CLpro<a/>. These HPC_Drug generated directories
+<a href="step1/pfizer.jpg"> PF-07321332</a> in complex with <a href="step1/3clpro.jpg"> 3CLpro<a/>. These HPC_Drug generated directories
 can also be found at the <a href="https://zenodo.org/record/5139374">
 Zenodo repository</a>.</p>
 
