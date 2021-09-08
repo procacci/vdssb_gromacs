@@ -1,171 +1,182 @@
-<pre>
-#!/bin/bash
-# computes  work from dhdl file
-# syntax:
-# $ works.bash file.dhdl 
-#
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>works.bash</title>
+<link rel="stylesheet" type="text/css" href="highlight.css">
+</head>
+<body class="hl">
+<pre class="hl"><span class="hl slc">#!/bin/bash</span>
+<span class="hl slc"># computes  work from dhdl file</span>
+<span class="hl slc"># syntax:</span>
+<span class="hl slc"># $ works.bash file.dhdl </span>
+<span class="hl slc">#</span>
 
-if [ $# -eq 0 ] ; then 
-    echo " Extract work data bound and ubound directories generated with gmx/multidir" 
-    echo " syntax: $BIN_PATH/works.bash DIRE"
-    echo "          where DIRE is a user-defined name for the drug-receptor pair"
-    exit
-fi 
+<span class="hl kwa">if</span> <span class="hl opt">[</span> <span class="hl kwd">$#</span> <span class="hl opt">-</span>eq <span class="hl num">0</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; Extract work data bound and ubound directories generated with gmx/multidir&quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; syntax:</span> <span class="hl ipl">$BIN_PATH</span><span class="hl str">/works.bash DIRE&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          where DIRE is a user-defined name for the drug-receptor pair&quot;</span>
+    <span class="hl kwb">exit</span>
+<span class="hl kwa">fi</span> 
 
-if [ ! -d Results ]; then
+<span class="hl kwa">if</span> <span class="hl opt">[ ! -</span>d Results <span class="hl opt">];</span> <span class="hl kwa">then</span>
     mkdir Results 
-fi
+<span class="hl kwa">fi</span>
 
-# process bound state dhdl files 
+<span class="hl slc"># process bound state dhdl files </span>
 
-histog=bin/histog
-bound_dir=bound
-# vdw work
-rm blj.wrk >& /dev/null
-for i in  $bound_dir/fsdam/b*/dhdlvdw.xvg; do
-    # find the pass
-    dl=`grep -v -e "[#@]" $i | wc -l | awk '{print dl=1/($1-1)}'`
-    # do the integral
-    grep -v -e "[#@]" $i | awk -v dl=$dl '{a+=$2*dl}END{print -a}' >> blj.wrk
-done
-echo "lj bound done"
+histog<span class="hl opt">=</span>bin<span class="hl opt">/</span>histog
+bound_dir<span class="hl opt">=</span>bound
+<span class="hl slc"># vdw work</span>
+<span class="hl kwc">rm</span> blj.wrk <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwa">for</span> i <span class="hl kwa">in</span>  <span class="hl kwd">$bound_dir</span><span class="hl opt">/</span>fsdam<span class="hl opt">/</span>b<span class="hl opt">*/</span>dhdlvdw.xvg<span class="hl opt">;</span> <span class="hl kwa">do</span>
+    <span class="hl slc"># find the pass</span>
+    dl<span class="hl opt">=</span><span class="hl str">`grep -v -e &quot;[#&#64;]&quot;</span> <span class="hl ipl">$i</span> <span class="hl str">| wc -l | awk '{print dl=1/(</span><span class="hl ipl">$1</span><span class="hl str">-1)}'`</span>
+    <span class="hl slc"># do the integral</span>
+    <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl opt">-</span>e <span class="hl str">&quot;[#&#64;]&quot;</span> <span class="hl kwd">$i</span> | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v dl<span class="hl opt">=</span><span class="hl kwd">$dl</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">*dl}END{print -a}'</span> <span class="hl opt">&gt;&gt;</span> blj.wrk
+<span class="hl kwa">done</span>
+<span class="hl kwb">echo</span> <span class="hl str">&quot;lj bound done&quot;</span>
 
-# qq work 
-rm bqq.wrk >& /dev/null
-for i in  $bound_dir/fsdam/b*/dhdlQ.xvg; do
-    # find the pass
-    dl=`grep -v -e "[#@]" $i | wc -l | awk '{print dl=1/($1-1)}'`
-    # do the integral
-    grep -v -e "[#@]" $i | awk -v dl=$dl '{a+=$2*dl}END{print -a}' >> bqq.wrk
-done
-echo "qq bound done"
+<span class="hl slc"># qq work </span>
+<span class="hl kwc">rm</span> bqq.wrk <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwa">for</span> i <span class="hl kwa">in</span>  <span class="hl kwd">$bound_dir</span><span class="hl opt">/</span>fsdam<span class="hl opt">/</span>b<span class="hl opt">*/</span>dhdlQ.xvg<span class="hl opt">;</span> <span class="hl kwa">do</span>
+    <span class="hl slc"># find the pass</span>
+    dl<span class="hl opt">=</span><span class="hl str">`grep -v -e &quot;[#&#64;]&quot;</span> <span class="hl ipl">$i</span> <span class="hl str">| wc -l | awk '{print dl=1/(</span><span class="hl ipl">$1</span><span class="hl str">-1)}'`</span>
+    <span class="hl slc"># do the integral</span>
+    <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl opt">-</span>e <span class="hl str">&quot;[#&#64;]&quot;</span> <span class="hl kwd">$i</span> | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v dl<span class="hl opt">=</span><span class="hl kwd">$dl</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">*dl}END{print -a}'</span> <span class="hl opt">&gt;&gt;</span> bqq.wrk
+<span class="hl kwa">done</span>
+<span class="hl kwb">echo</span> <span class="hl str">&quot;qq bound done&quot;</span>
 
-unbound_dir=unbound
-# vdw work
-rm ulj.wrk >& /dev/null
-for i in $unbound_dir/fsdam/u*/dhdlvdw.xvg; do
-    # find the pass
-    dl=`grep -v -e "[#@]" $i | wc -l | awk '{print dl=1/($1-1)}'`
-    # do the integral
-    grep -v -e "[#@]" $i | awk -v dl=$dl '{a+=$2*dl}END{print  a}' >> ulj.wrk
-done
-echo "lj unbound done"
+unbound_dir<span class="hl opt">=</span>unbound
+<span class="hl slc"># vdw work</span>
+<span class="hl kwc">rm</span> ulj.wrk <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwa">for</span> i <span class="hl kwa">in</span> <span class="hl kwd">$unbound_dir</span><span class="hl opt">/</span>fsdam<span class="hl opt">/</span>u<span class="hl opt">*/</span>dhdlvdw.xvg<span class="hl opt">;</span> <span class="hl kwa">do</span>
+    <span class="hl slc"># find the pass</span>
+    dl<span class="hl opt">=</span><span class="hl str">`grep -v -e &quot;[#&#64;]&quot;</span> <span class="hl ipl">$i</span> <span class="hl str">| wc -l | awk '{print dl=1/(</span><span class="hl ipl">$1</span><span class="hl str">-1)}'`</span>
+    <span class="hl slc"># do the integral</span>
+    <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl opt">-</span>e <span class="hl str">&quot;[#&#64;]&quot;</span> <span class="hl kwd">$i</span> | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v dl<span class="hl opt">=</span><span class="hl kwd">$dl</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">*dl}END{print  a}'</span> <span class="hl opt">&gt;&gt;</span> ulj.wrk
+<span class="hl kwa">done</span>
+<span class="hl kwb">echo</span> <span class="hl str">&quot;lj unbound done&quot;</span>
 
-# qq work 
-rm uqq.wrk >& /dev/null
-for i in  $unbound_dir/fsdam/u*/dhdlQ.xvg; do
-    # find the pass
-    dl=`grep -v -e "[#@]" $i | wc -l | awk '{print dl=1/($1-1)}'`
-    # do the integral
-    grep -v -e "[#@]" $i | awk -v dl=$dl '{a+=$2*dl}END{print  a}' >> uqq.wrk
-done
-echo "qq unbound done"
+<span class="hl slc"># qq work </span>
+<span class="hl kwc">rm</span> uqq.wrk <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwa">for</span> i <span class="hl kwa">in</span>  <span class="hl kwd">$unbound_dir</span><span class="hl opt">/</span>fsdam<span class="hl opt">/</span>u<span class="hl opt">*/</span>dhdlQ.xvg<span class="hl opt">;</span> <span class="hl kwa">do</span>
+    <span class="hl slc"># find the pass</span>
+    dl<span class="hl opt">=</span><span class="hl str">`grep -v -e &quot;[#&#64;]&quot;</span> <span class="hl ipl">$i</span> <span class="hl str">| wc -l | awk '{print dl=1/(</span><span class="hl ipl">$1</span><span class="hl str">-1)}'`</span>
+    <span class="hl slc"># do the integral</span>
+    <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl opt">-</span>e <span class="hl str">&quot;[#&#64;]&quot;</span> <span class="hl kwd">$i</span> | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v dl<span class="hl opt">=</span><span class="hl kwd">$dl</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">*dl}END{print  a}'</span> <span class="hl opt">&gt;&gt;</span> uqq.wrk
+<span class="hl kwa">done</span>
+<span class="hl kwb">echo</span> <span class="hl str">&quot;qq unbound done&quot;</span>
 
-paste ulj.wrk uqq.wrk   | awk '{print $1+$2}' >  temp-u.wrk
-paste blj.wrk bqq.wrk   | awk '{print $1+$2}' >  temp-b.wrk
+<span class="hl kwc">paste</span> ulj.wrk uqq.wrk   | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$1</span><span class="hl str">+</span><span class="hl ipl">$2</span><span class="hl str">}'</span> <span class="hl opt">&gt;</span>  temp-u.wrk
+<span class="hl kwc">paste</span> blj.wrk bqq.wrk   | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$1</span><span class="hl str">+</span><span class="hl ipl">$2</span><span class="hl str">}'</span> <span class="hl opt">&gt;</span>  temp-b.wrk
 
-bin/zscore.awk temp-u.wrk | grep -v "#" > temp1-u.wrk
-bin/zscore.awk temp1-u.wrk | grep -v "#" > temp2-u.wrk
-bin/zscore.awk temp2-u.wrk | grep -v "#" > u.wrk
+bin<span class="hl opt">/</span>zscore.<span class="hl kwc">awk</span> temp-u.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> temp1-u.wrk
+bin<span class="hl opt">/</span>zscore.<span class="hl kwc">awk</span> temp1-u.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> temp2-u.wrk
+bin<span class="hl opt">/</span>zscore.<span class="hl kwc">awk</span> temp2-u.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> u.wrk
 
-rm temp-u.wrk temp1-u.wrk temp2-u.wrk
-
-
-bin/zscore.awk temp-b.wrk | grep -v "#" > temp1-b.wrk
-bin/zscore.awk temp1-b.wrk | grep -v "#" > temp2-b.wrk
-bin/zscore.awk temp2-b.wrk | grep -v "#" > b.wrk
-
-rm temp-b.wrk temp1-b.wrk temp2-b.wrk
+<span class="hl kwc">rm</span> temp-u.wrk temp1-u.wrk temp2-u.wrk
 
 
-dire=$1
+bin<span class="hl opt">/</span>zscore.<span class="hl kwc">awk</span> temp-b.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> temp1-b.wrk
+bin<span class="hl opt">/</span>zscore.<span class="hl kwc">awk</span> temp1-b.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> temp2-b.wrk
+bin<span class="hl opt">/</span>zscore.<span class="hl kwc">awk</span> temp2-b.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> b.wrk
 
-# now make the convolution of b and u wrk values as
-# P(z) int P_b(z-x)P_u(x) dx 
-# bootstrap (50 samples would do) loop to get the error
-# we will do bootstrap on u and b work *indipendently* prior to compute
-# the convoilution. This gives a better estimate of the error
-
-rm -fr em.tmp jar.tmp
-for i in {1..20} ; do  # bootstrap loop  
-    fileu=u.wrk
-    fileb=b.wrk
-    bin/bs_res.awk -v seed=$i $fileu > u.tmp
-    bin/bs_res.awk -v seed=$i $fileb > b.tmp
-    nu=`wc -l $fileu | awk '{print $1}'`
-    nb=`wc -l $fileb | awk '{print $1}'`
-    cat u.tmp b.tmp  > filebu.tmp  # combine bootstrapped files
-    awk -v nu=$nu -v nb=$nb '\
-  {\
-   if(NR<=nu)  {wu[NR]=$1} else {wb[NR-nu]=$1}\
-       }\
-  END{\
-      for(i=1; i<=nu; i++) {\
-          for(j=1; j<=nb; j++){\
-             print  wu[i]+wb[j]\
-          }\
-      }\
-}' filebu.tmp > $dire.BU.wrk
-    awk '{print $1/4.184}' $dire.BU.wrk | $histog +i0.1 > $dire.BU.hst   
-    #computes Jarzynski free energy on the bound-undbound convolution
-    bin/free.awk $dire.BU.wrk | awk '{print $6}' >>  jar.tmp
-    #computes EexpecMaxim estimate  free energy on the convolution
-    bin/em/em 0.1 $i $dire.BU.wrk  >> em.tmp
-done
+<span class="hl kwc">rm</span> temp-b.wrk temp1-b.wrk temp2-b.wrk
 
 
+dire<span class="hl opt">=</span><span class="hl kwd">$1</span>
+
+<span class="hl slc"># now make the convolution of b and u wrk values as</span>
+<span class="hl slc"># P(z) int P_b(z-x)P_u(x) dx </span>
+<span class="hl slc"># bootstrap (50 samples would do) loop to get the error</span>
+<span class="hl slc"># we will do bootstrap on u and b work *indipendently* prior to compute</span>
+<span class="hl slc"># the convoilution. This gives a better estimate of the error</span>
+
+<span class="hl kwc">rm</span> <span class="hl opt">-</span>fr em.tmp jar.tmp
+<span class="hl kwa">for</span> i <span class="hl kwa">in</span> <span class="hl opt">{</span><span class="hl num">1</span>.<span class="hl num">.20</span><span class="hl opt">} ;</span> <span class="hl kwa">do</span>  <span class="hl slc"># bootstrap loop  </span>
+    fileu<span class="hl opt">=</span>u.wrk
+    fileb<span class="hl opt">=</span>b.wrk
+    bin<span class="hl opt">/</span>bs_res.<span class="hl kwc">awk</span> <span class="hl opt">-</span>v seed<span class="hl opt">=</span><span class="hl kwd">$i $fileu</span> <span class="hl opt">&gt;</span> u.tmp
+    bin<span class="hl opt">/</span>bs_res.<span class="hl kwc">awk</span> <span class="hl opt">-</span>v seed<span class="hl opt">=</span><span class="hl kwd">$i $fileb</span> <span class="hl opt">&gt;</span> b.tmp
+    nu<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$fileu</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>
+    nb<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$fileb</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>
+    <span class="hl kwc">cat</span> u.tmp b.tmp  <span class="hl opt">&gt;</span> filebu.tmp  <span class="hl slc"># combine bootstrapped files</span>
+    <span class="hl kwc">awk</span> <span class="hl opt">-</span>v nu<span class="hl opt">=</span><span class="hl kwd">$nu</span> <span class="hl opt">-</span>v nb<span class="hl opt">=</span><span class="hl kwd">$nb</span> <span class="hl str">'\</span>
+<span class="hl str">  {\</span>
+<span class="hl str">   if(NR&lt;=nu)  {wu[NR]=</span><span class="hl ipl">$1</span><span class="hl str">} else {wb[NR-nu]=</span><span class="hl ipl">$1</span><span class="hl str">}\</span>
+<span class="hl str">       }\</span>
+<span class="hl str">  END{\</span>
+<span class="hl str">      for(i=1; i&lt;=nu; i++) {\</span>
+<span class="hl str">          for(j=1; j&lt;=nb; j++){\</span>
+<span class="hl str">             print  wu[i]+wb[j]\</span>
+<span class="hl str">          }\</span>
+<span class="hl str">      }\</span>
+<span class="hl str">}'</span> filebu.tmp <span class="hl opt">&gt;</span> <span class="hl kwd">$dire</span>.BU.wrk
+    <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$1</span><span class="hl str">/4.184}'</span> <span class="hl kwd">$dire</span>.BU.wrk | <span class="hl kwd">$histog</span> <span class="hl opt">+</span>i0.1 <span class="hl opt">&gt;</span> <span class="hl kwd">$dire</span>.BU.hst   
+    <span class="hl slc">#computes Jarzynski free energy on the bound-undbound convolution</span>
+    bin<span class="hl opt">/</span>free.<span class="hl kwc">awk</span> <span class="hl kwd">$dire</span>.BU.wrk | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$6</span><span class="hl str">}'</span> <span class="hl opt">&gt;&gt;</span>  jar.tmp
+    <span class="hl slc">#computes EexpecMaxim estimate  free energy on the convolution</span>
+    bin<span class="hl opt">/</span>em<span class="hl opt">/</span>em <span class="hl num">0.1</span> <span class="hl kwd">$i $dire</span>.BU.wrk  <span class="hl opt">&gt;&gt;</span> em.tmp
+<span class="hl kwa">done</span>
 
 
-grep "Components=  1" em.tmp |  awk '{a+=$4; a2+=$4^2}END{print a/NR,1.96*sqrt(a2/NR -(a/NR)^2)}' > DG.1 
-grep "Components=  2" em.tmp |  awk '{a+=$4; a2+=$4^2}END{print a/NR,1.96*sqrt(a2/NR -(a/NR)^2)}' > DG.2
-grep "Components=  3" em.tmp |  awk '{a+=$4; a2+=$4^2}END{print a/NR,1.96*sqrt(a2/NR -(a/NR)^2)}' > DG.3
-
-# print free energy estimates 
-DG1=`awk -v vol=$volcor -v qc=$corr '{print $1+vol+qc}' DG.1`
-DG1err=`awk '{print $2}' DG.1`
-
-printf " DG1= %4.1f" $DG1
-printf " %4.1f" $DG1err
 
 
-DG2=`awk -v vol=$volcor -v qc=$corr '{print $1+vol+qc}' DG.2`
-DG2err=`awk '{print $2}' DG.2`
+<span class="hl kwc">grep</span> <span class="hl str">&quot;Components=  1&quot;</span> em.tmp |  <span class="hl kwc">awk</span> <span class="hl str">'{a+=</span><span class="hl ipl">$4</span><span class="hl str">; a2+=</span><span class="hl ipl">$4</span><span class="hl str">^2}END{print a/NR,1.96*sqrt(a2/NR -(a/NR)^2)}'</span> <span class="hl opt">&gt;</span> DG<span class="hl num">.1</span> 
+<span class="hl kwc">grep</span> <span class="hl str">&quot;Components=  2&quot;</span> em.tmp |  <span class="hl kwc">awk</span> <span class="hl str">'{a+=</span><span class="hl ipl">$4</span><span class="hl str">; a2+=</span><span class="hl ipl">$4</span><span class="hl str">^2}END{print a/NR,1.96*sqrt(a2/NR -(a/NR)^2)}'</span> <span class="hl opt">&gt;</span> DG<span class="hl num">.2</span>
+<span class="hl kwc">grep</span> <span class="hl str">&quot;Components=  3&quot;</span> em.tmp |  <span class="hl kwc">awk</span> <span class="hl str">'{a+=</span><span class="hl ipl">$4</span><span class="hl str">; a2+=</span><span class="hl ipl">$4</span><span class="hl str">^2}END{print a/NR,1.96*sqrt(a2/NR -(a/NR)^2)}'</span> <span class="hl opt">&gt;</span> DG<span class="hl num">.3</span>
 
-printf " DG2= %4.1f" $DG2
-printf " %4.1f" $DG2err
+<span class="hl slc"># print free energy estimates </span>
+DG1<span class="hl opt">=</span><span class="hl str">`awk -v vol=</span><span class="hl ipl">$volcor</span> <span class="hl str">-v qc=</span><span class="hl ipl">$corr</span> <span class="hl str">'{print</span> <span class="hl ipl">$1</span><span class="hl str">+vol+qc}' DG.1`</span>
+DG1err<span class="hl opt">=</span><span class="hl str">`awk '{print</span> <span class="hl ipl">$2</span><span class="hl str">}' DG.1`</span>
 
-DG3=`awk -v vol=$volcor -v qc=$corr '{print $1+vol+qc}' DG.3`
-DG3err=`awk '{print $2}' DG.3`
-
-printf " DG3= %4.1f" $DG3
-printf " %4.1f" $DG3err
-
-DGj=`awk '{a+=$1}END{print a/NR}' jar.tmp`
-DGjerr=`awk '{a+=$1; a2+=$1^2}END{print 1.96*sqrt((a2/NR) - (a/NR)^2)}' jar.tmp`
-
-printf " DGj= %4.1f" $DGj
-printf " %4.1f\n" $DGjerr
+<span class="hl kwb">printf</span> <span class="hl str">&quot; DG1= %4.1f&quot;</span> <span class="hl kwd">$DG1</span>
+<span class="hl kwb">printf</span> <span class="hl str">&quot; %4.1f&quot;</span> <span class="hl kwd">$DG1err</span>
 
 
-nu=`wc -l $fileu | awk '{print $1}'`
-nb=`wc -l $fileb | awk '{print $1}'`
-cat u.wrk b.wrk  > filebu.tmp  # combine bootstrapped files
-awk -v nu=$nu -v nb=$nb '\
-  {\
-   if(NR<=nu)  {wu[NR]=$1} else {wb[NR-nu]=$1}\
-       }\
-  END{\
-      for(i=1; i<=nu; i++) {\
-          for(j=1; j<=nb; j++){\
-             print  wu[i]+wb[j]\
-          }\
-      }\
-}' filebu.tmp > $dire.BU.wrk
-awk '{print $1/4.184}' $dire.BU.wrk | $histog +i0.1 > $dire.BU.hst   
+DG2<span class="hl opt">=</span><span class="hl str">`awk -v vol=</span><span class="hl ipl">$volcor</span> <span class="hl str">-v qc=</span><span class="hl ipl">$corr</span> <span class="hl str">'{print</span> <span class="hl ipl">$1</span><span class="hl str">+vol+qc}' DG.2`</span>
+DG2err<span class="hl opt">=</span><span class="hl str">`awk '{print</span> <span class="hl ipl">$2</span><span class="hl str">}' DG.2`</span>
 
-mv $dire.BU.hst Results
-mv u.wrk Results/${dire}_u.wrk
-mv b.wrk Results/${dire}_b.wrk
-mv em.tmp Results/$dire.em
-mv jar.tmp Results/$dire.jar
-</pre> 
+<span class="hl kwb">printf</span> <span class="hl str">&quot; DG2= %4.1f&quot;</span> <span class="hl kwd">$DG2</span>
+<span class="hl kwb">printf</span> <span class="hl str">&quot; %4.1f&quot;</span> <span class="hl kwd">$DG2err</span>
+
+DG3<span class="hl opt">=</span><span class="hl str">`awk -v vol=</span><span class="hl ipl">$volcor</span> <span class="hl str">-v qc=</span><span class="hl ipl">$corr</span> <span class="hl str">'{print</span> <span class="hl ipl">$1</span><span class="hl str">+vol+qc}' DG.3`</span>
+DG3err<span class="hl opt">=</span><span class="hl str">`awk '{print</span> <span class="hl ipl">$2</span><span class="hl str">}' DG.3`</span>
+
+<span class="hl kwb">printf</span> <span class="hl str">&quot; DG3= %4.1f&quot;</span> <span class="hl kwd">$DG3</span>
+<span class="hl kwb">printf</span> <span class="hl str">&quot; %4.1f&quot;</span> <span class="hl kwd">$DG3err</span>
+
+DGj<span class="hl opt">=</span><span class="hl str">`awk '{a+=</span><span class="hl ipl">$1</span><span class="hl str">}END{print a/NR}' jar.tmp`</span>
+DGjerr<span class="hl opt">=</span><span class="hl str">`awk '{a+=</span><span class="hl ipl">$1</span><span class="hl str">; a2+=</span><span class="hl ipl">$1</span><span class="hl str">^2}END{print 1.96*sqrt((a2/NR) - (a/NR)^2)}' jar.tmp`</span>
+
+<span class="hl kwb">printf</span> <span class="hl str">&quot; DGj= %4.1f&quot;</span> <span class="hl kwd">$DGj</span>
+<span class="hl kwb">printf</span> <span class="hl str">&quot; %4.1f</span><span class="hl esc">\n</span><span class="hl str">&quot;</span> <span class="hl kwd">$DGjerr</span>
+
+
+nu<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$fileu</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>
+nb<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$fileb</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>
+<span class="hl kwc">cat</span> u.wrk b.wrk  <span class="hl opt">&gt;</span> filebu.tmp  <span class="hl slc"># combine bootstrapped files</span>
+<span class="hl kwc">awk</span> <span class="hl opt">-</span>v nu<span class="hl opt">=</span><span class="hl kwd">$nu</span> <span class="hl opt">-</span>v nb<span class="hl opt">=</span><span class="hl kwd">$nb</span> <span class="hl str">'\</span>
+<span class="hl str">  {\</span>
+<span class="hl str">   if(NR&lt;=nu)  {wu[NR]=</span><span class="hl ipl">$1</span><span class="hl str">} else {wb[NR-nu]=</span><span class="hl ipl">$1</span><span class="hl str">}\</span>
+<span class="hl str">       }\</span>
+<span class="hl str">  END{\</span>
+<span class="hl str">      for(i=1; i&lt;=nu; i++) {\</span>
+<span class="hl str">          for(j=1; j&lt;=nb; j++){\</span>
+<span class="hl str">             print  wu[i]+wb[j]\</span>
+<span class="hl str">          }\</span>
+<span class="hl str">      }\</span>
+<span class="hl str">}'</span> filebu.tmp <span class="hl opt">&gt;</span> <span class="hl kwd">$dire</span>.BU.wrk
+<span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$1</span><span class="hl str">/4.184}'</span> <span class="hl kwd">$dire</span>.BU.wrk | <span class="hl kwd">$histog</span> <span class="hl opt">+</span>i0.1 <span class="hl opt">&gt;</span> <span class="hl kwd">$dire</span>.BU.hst   
+
+<span class="hl kwc">mv</span> <span class="hl kwd">$dire</span>.BU.hst Results
+<span class="hl kwc">mv</span> u.wrk Results<span class="hl opt">/</span><span class="hl kwd">${dire}</span>_u.wrk
+<span class="hl kwc">mv</span> b.wrk Results<span class="hl opt">/</span><span class="hl kwd">${dire}</span>_b.wrk
+<span class="hl kwc">mv</span> em.tmp Results<span class="hl opt">/</span><span class="hl kwd">$dire</span>.em
+<span class="hl kwc">mv</span> jar.tmp Results<span class="hl opt">/</span><span class="hl kwd">$dire</span>.jrz
+
+</pre>
+</body>
+</html>
+<!--HTML generated by highlight 3.18, http://www.andre-simon.de/-->
