@@ -46,10 +46,10 @@
      
     
 <p style="text-align:justify"> The docking calculation between the ligand <a href="step1/pfizer.jpg"> PF-07321332 </a> 
-( PDB file <a href="ligand.pdb"> ligand.pdb </a> ) and the receptor
-<a href="3clpro.jpg"> 3CL<sup>pro</sup> (domain I+II)</a> (pdb file <a href="3clc.pdb"> 3clc.pdb </a> ) is
+( PDB file <a href="step1/ligand.pdb"> ligand.pdb </a> ) and the receptor
+<a href="step1/3clpro.jpg"> 3CL<sup>pro</sup> (domain I+II)</a> (pdb file <a href="step1/3clc.pdb"> 3clc.pdb </a> ) is
 performed using <a href="http://autodock.scripps.edu/wiki/AutoDock4">
-Autodock4 </a> with the wrapper <code>bash</code> script <a href="docking_bash.html">
+Autodock4 </a> with the wrapper <code>bash</code> script <a href="step1/docking_bash.html">
   docking.bash</a>:</p> <br> 
 
 <pre>
@@ -62,15 +62,15 @@ of mass of the fully flexible ligand placed within a 22.5 Angs. (60
 grid points, (<code> -p 60 </code>) , spaced 0.375 Angs. side-lenght
 cubic box centered at the at the midpoint (<code> -x -10.55 -y 20.65
 -z 66.75</code>) vector connecting the S(CYS145) and NE(HIS41) atoms
-in the <a href="active.jpg"> receptor active site </a>.  A maximum
+in the <a href="step1/active.jpg"> receptor active site </a>.  A maximum
 of 2.5 million energy evaluations are applied for each docking
-round. Issuing the command without arguments yield the <a href="help.html"> help </a> for the script usage.</p><br>  
+round. Issuing the command without arguments yield the <a href="step1/help.html"> help </a> for the script usage.</p><br>  
 <br>
 
 <p style="text-align:justify"> The results are clustered using the default tolerance of 2
 Angs. The lowest energy docked conformation of the lowest energy
 cluster is the <i> best-docked </i>  conformation. <br> The script
-automatically generates the <a href="complex_ligand.pdb">
+automatically generates the <a href="step1/complex_ligand.pdb">
 ligand-receptor complex pdb file </a> with the ligand in the <b>
 best </b> (lowest binding free energy) docking pose. This is 
 the starting input structure for the subsequent
