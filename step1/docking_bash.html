@@ -1,242 +1,253 @@
-<pre>
-#!/bin/bash
-#
-# Generate pdb of best docked pose ligand-receptor
-# must use autodock4.6.2
-# downloaded from http://autodock.scripps.edu/ as autodocksuite-4.2.6-x86_64Linux2.tar
-#
-# mgltoolst must also be installed in your homedir
-# (written by P.Procacci, UNIFI 2020)
-#
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>docking.bash</title>
+<link rel="stylesheet" type="text/css" href="highlight.css">
+</head>
+<body class="hl">
+<pre class="hl"><span class="hl slc">#!/bin/bash</span>
+<span class="hl slc">#</span>
+<span class="hl slc"># Generate pdb of best docked pose ligand-receptor</span>
+<span class="hl slc"># must use autodock4.6.2</span>
+<span class="hl slc"># downloaded from http://autodock.scripps.edu/ as autodocksuite-4.2.6-x86_64Linux2.tar</span>
+<span class="hl slc">#</span>
+<span class="hl slc"># mgltoolst must also be installed in your homedir</span>
+<span class="hl slc"># (written by P.Procacci, UNIFI 2020)</span>
+<span class="hl slc">#</span>
 
-# setup python instruments
+<span class="hl slc"># setup python instruments</span>
 
-if [ ! -d ~/mgltools ] ; then
-    echo " no mgltools dir found in your home "
-    echo "download and install mgltools_x86_64Linux2_1.5.6.tar.gz in your homedir"
-    exit
-fi
+<span class="hl kwa">if</span> <span class="hl opt">[ ! -</span>d ~<span class="hl opt">/</span>mgltools <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; no mgltools dir found in your home &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;download and install mgltools_x86_64Linux2_1.5.6.tar.gz in your homedir&quot;</span>
+    <span class="hl kwb">exit</span>
+<span class="hl kwa">fi</span>
 
-pysh=~/mgltools/bin/pythonsh
-plig=~/mgltools/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_ligand4.py
-prec=~/mgltools/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_receptor4.py
-pfle=~/mgltools/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_flexreceptor4.py
-pgrid=~/mgltools/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_gpf4.py
-ppar=~/mgltools/MGLToolsPckgs/AutoDockTools/Utilities24/prepare_dpf4.py
+pysh<span class="hl opt">=</span>~<span class="hl opt">/</span>mgltools<span class="hl opt">/</span>bin<span class="hl opt">/</span>pythonsh
+plig<span class="hl opt">=</span>~<span class="hl opt">/</span>mgltools<span class="hl opt">/</span>MGLToolsPckgs<span class="hl opt">/</span>AutoDockTools<span class="hl opt">/</span>Utilities24<span class="hl opt">/</span>prepare_ligand4.py
+prec<span class="hl opt">=</span>~<span class="hl opt">/</span>mgltools<span class="hl opt">/</span>MGLToolsPckgs<span class="hl opt">/</span>AutoDockTools<span class="hl opt">/</span>Utilities24<span class="hl opt">/</span>prepare_receptor4.py
+pfle<span class="hl opt">=</span>~<span class="hl opt">/</span>mgltools<span class="hl opt">/</span>MGLToolsPckgs<span class="hl opt">/</span>AutoDockTools<span class="hl opt">/</span>Utilities24<span class="hl opt">/</span>prepare_flexreceptor4.py
+pgrid<span class="hl opt">=</span>~<span class="hl opt">/</span>mgltools<span class="hl opt">/</span>MGLToolsPckgs<span class="hl opt">/</span>AutoDockTools<span class="hl opt">/</span>Utilities24<span class="hl opt">/</span>prepare_gpf4.py
+ppar<span class="hl opt">=</span>~<span class="hl opt">/</span>mgltools<span class="hl opt">/</span>MGLToolsPckgs<span class="hl opt">/</span>AutoDockTools<span class="hl opt">/</span>Utilities24<span class="hl opt">/</span>prepare_dpf4.py
 
-n=50
-g=0.375
-p=40
-while getopts ":l:r:x:y:z:n:g:p:f:d:" opt; do 
-    case $opt in 
-	l)
-	    ligand=$OPTARG;
-	    ;;
-	r) 
-	    receptor=$OPTARG; 
-	    ;;
-	x) 
-	    x=$OPTARG; 
-	    ;;
-	y) 
-	    y=$OPTARG; 
-	    ;;
-	z) 
-	    z=$OPTARG; 
-	    ;;
-	n) 
-	    n=$OPTARG; 
-	    ;;
-	g) 
-	    g=$OPTARG; 
-	    ;;
-	p) 
-	    p=$OPTARG;
-	    ;;
-	f) 
-	    f=$OPTARG;
-	    ;;
-	d) 
-	    d=$OPTARG;
-	    ;;
-    esac
-done
+n<span class="hl opt">=</span><span class="hl num">50</span>
+g<span class="hl opt">=</span><span class="hl num">0.375</span>
+p<span class="hl opt">=</span><span class="hl num">40</span>
+<span class="hl kwa">while</span> <span class="hl kwb">getopts</span> <span class="hl str">&quot;:l:r:x:y:z:n:g:p:f:d:&quot;</span> opt<span class="hl opt">;</span> <span class="hl kwa">do</span> 
+    <span class="hl kwa">case</span> <span class="hl kwd">$opt</span> <span class="hl kwa">in</span> 
+	l<span class="hl opt">)</span>
+	    ligand<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span>
+	    <span class="hl opt">;;</span>
+	r<span class="hl opt">)</span> 
+	    receptor<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span> 
+	    <span class="hl opt">;;</span>
+	x<span class="hl opt">)</span> 
+	    x<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span> 
+	    <span class="hl opt">;;</span>
+	y<span class="hl opt">)</span> 
+	    y<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span> 
+	    <span class="hl opt">;;</span>
+	z<span class="hl opt">)</span> 
+	    z<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span> 
+	    <span class="hl opt">;;</span>
+	n<span class="hl opt">)</span> 
+	    n<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span> 
+	    <span class="hl opt">;;</span>
+	g<span class="hl opt">)</span> 
+	    g<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span> 
+	    <span class="hl opt">;;</span>
+	p<span class="hl opt">)</span> 
+	    p<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span>
+	    <span class="hl opt">;;</span>
+	f<span class="hl opt">)</span> 
+	    f<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span>
+	    <span class="hl opt">;;</span>
+	d<span class="hl opt">)</span> 
+	    d<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span><span class="hl opt">;</span>
+	    <span class="hl opt">;;</span>
+    <span class="hl kwa">esac</span>
+<span class="hl kwa">done</span>
 
    
-###### function dodockfiles BEGINS ####################################
-function dodockfiles {
-    best=`grep "^   1 |" $1 | awk '{print $5}'`
-    free=`grep "^   1 |" $1  | awk '{print $3}'`
+<span class="hl slc">###### function dodockfiles BEGINS ####################################</span>
+<span class="hl kwa">function</span> dodockfiles <span class="hl opt">{</span>
+    best<span class="hl opt">=</span><span class="hl str">`grep &quot;^   1 |&quot;</span> <span class="hl ipl">$1</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$5</span><span class="hl str">}'`</span>
+    free<span class="hl opt">=</span><span class="hl str">`grep &quot;^   1 |&quot;</span> <span class="hl ipl">$1</span>  <span class="hl str">| awk '{print</span> <span class="hl ipl">$3</span><span class="hl str">}'`</span>
 
-    echo " Generating  the best docked" $best " complex with DG = "$free 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; Generating  the best docked&quot;</span> <span class="hl kwd">$best</span> <span class="hl str">&quot; complex with DG = &quot;</span><span class="hl kwd">$free</span> 
     
-    grep '^DOCKED' $1  | cut -c9- | awk -v run=$best '{if($1=="MODEL" && $2 == run) {ok=1}; if(ok==1 && $1 == "ATOM") {print}; if($1=="ENDMDL") {ok=0}}' | sed "s/  1   /-10   /g" > bestdocked.pdb
+    <span class="hl kwc">grep</span> <span class="hl str">'^DOCKED'</span> <span class="hl kwd">$1</span>  | cut <span class="hl opt">-</span>c9- | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v run<span class="hl opt">=</span><span class="hl kwd">$best</span> <span class="hl str">'{if(</span><span class="hl ipl">$1</span><span class="hl str">==&quot;MODEL&quot; &amp;&amp;</span> <span class="hl ipl">$2</span> <span class="hl str">== run) {ok=1}; if(ok==1 &amp;&amp;</span> <span class="hl ipl">$1</span> <span class="hl str">== &quot;ATOM&quot;) {print}; if(</span><span class="hl ipl">$1</span><span class="hl str">==&quot;ENDMDL&quot;) {ok=0}}'</span> | <span class="hl kwc">sed</span> <span class="hl str">&quot;s/  1   /-10   /g&quot;</span> <span class="hl opt">&gt;</span> bestdocked.pdb
     
-    cat bestdocked.pdb $receptor.pdbqt  > complex_${ligand}.pdbqt
-    obabel -i pdbqt complex_${ligand}.pdbqt -opdb -O complex_${ligand}.pdb
-    sed -i "s/  -10 /A   0 /g" complex_${ligand}.pdb
-    awk '{if($6==0) {i++;printf "%14s%.2X %-70s\n",  substr($0,1,14),i,substr($0,18,70)} else {print}}' complex_$ligand.pdb  > x.pdb ; mv x.pdb complex_$ligand.pdb
-    # generate 9 (or less) best docked states trajectory
-    rm traj_$ligand.pdb >& /dev/null
-    for i  in {1..9}; do
-	best=`grep "^   $i |" $1 | awk '{print $5}'`
-	free=`grep "^   $i |" $1  | awk '{print $3}'`
-	if [[ ! -z $best ]] ; then
-	    grep '^DOCKED' $1  | cut -c9- | awk -v run=$best '{if($1=="MODEL" && $2 == run) {ok=1}; if(ok==1 && $1 == "ATOM") {print}; if($1=="ENDMDL") {ok=0}}' | sed "s/  1   /-10   /g" > tmp.pdb
-	    echo "REMARK "$best $free >> traj_$ligand.pdb
- 	    cat tmp.pdb >> traj_$ligand.pdb
-	    cat $receptor.pdbqt >> traj_$ligand.pdb
-	    echo "END" >> traj_$ligand.pdb
-	fi
-    done
-    rm tmp* >& /dev/null 
-}
-####### function dodockfiles ENDS ##########################################
+    <span class="hl kwc">cat</span> bestdocked.pdb <span class="hl kwd">$receptor</span>.pdbqt  <span class="hl opt">&gt;</span> complex_<span class="hl kwd">${ligand}</span>.pdbqt
+    obabel <span class="hl opt">-</span>i pdbqt complex_<span class="hl kwd">${ligand}</span>.pdbqt <span class="hl opt">-</span>opdb <span class="hl opt">-</span>O complex_<span class="hl kwd">${ligand}</span>.pdb
+    <span class="hl kwc">sed</span> <span class="hl opt">-</span>i <span class="hl str">&quot;s/  -10 /A   0 /g&quot;</span> complex_<span class="hl kwd">${ligand}</span>.pdb
+    <span class="hl kwc">awk</span> <span class="hl str">'{if(</span><span class="hl ipl">$6</span><span class="hl str">==0) {i++;printf &quot;%14s%.2X %-70s</span><span class="hl esc">\n</span><span class="hl str">&quot;,  substr(</span><span class="hl ipl">$0</span><span class="hl str">,1,14),i,substr(</span><span class="hl ipl">$0</span><span class="hl str">,18,70)} else {print}}'</span> complex_<span class="hl kwd">$ligand</span>.pdb  <span class="hl opt">&gt;</span> x.pdb <span class="hl opt">;</span> <span class="hl kwc">mv</span> x.pdb complex_<span class="hl kwd">$ligand</span>.pdb
+    <span class="hl slc"># generate 9 (or less) best docked states trajectory</span>
+    <span class="hl kwc">rm</span> traj_<span class="hl kwd">$ligand</span>.pdb <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+    <span class="hl kwa">for</span> i  <span class="hl kwa">in</span> <span class="hl opt">{</span><span class="hl num">1</span>.<span class="hl num">.9</span><span class="hl opt">};</span> <span class="hl kwa">do</span>
+	best<span class="hl opt">=</span><span class="hl str">`grep &quot;^</span>   <span class="hl ipl">$i</span> <span class="hl str">|&quot;</span> <span class="hl ipl">$1</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$5</span><span class="hl str">}'`</span>
+	free<span class="hl opt">=</span><span class="hl str">`grep &quot;^</span>   <span class="hl ipl">$i</span> <span class="hl str">|&quot;</span> <span class="hl ipl">$1</span>  <span class="hl str">| awk '{print</span> <span class="hl ipl">$3</span><span class="hl str">}'`</span>
+	<span class="hl kwa">if</span> <span class="hl opt">[[ ! -</span>z <span class="hl kwd">$best</span> <span class="hl opt">]] ;</span> <span class="hl kwa">then</span>
+	    <span class="hl kwc">grep</span> <span class="hl str">'^DOCKED'</span> <span class="hl kwd">$1</span>  | cut <span class="hl opt">-</span>c9- | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v run<span class="hl opt">=</span><span class="hl kwd">$best</span> <span class="hl str">'{if(</span><span class="hl ipl">$1</span><span class="hl str">==&quot;MODEL&quot; &amp;&amp;</span> <span class="hl ipl">$2</span> <span class="hl str">== run) {ok=1}; if(ok==1 &amp;&amp;</span> <span class="hl ipl">$1</span> <span class="hl str">== &quot;ATOM&quot;) {print}; if(</span><span class="hl ipl">$1</span><span class="hl str">==&quot;ENDMDL&quot;) {ok=0}}'</span> | <span class="hl kwc">sed</span> <span class="hl str">&quot;s/  1   /-10   /g&quot;</span> <span class="hl opt">&gt;</span> tmp.pdb
+	    <span class="hl kwb">echo</span> <span class="hl str">&quot;REMARK &quot;</span><span class="hl kwd">$best $free</span> <span class="hl opt">&gt;&gt;</span> traj_<span class="hl kwd">$ligand</span>.pdb
+ 	    <span class="hl kwc">cat</span> tmp.pdb <span class="hl opt">&gt;&gt;</span> traj_<span class="hl kwd">$ligand</span>.pdb
+	    <span class="hl kwc">cat</span> <span class="hl kwd">$receptor</span>.pdbqt <span class="hl opt">&gt;&gt;</span> traj_<span class="hl kwd">$ligand</span>.pdb
+	    <span class="hl kwb">echo</span> <span class="hl str">&quot;END&quot;</span> <span class="hl opt">&gt;&gt;</span> traj_<span class="hl kwd">$ligand</span>.pdb
+	<span class="hl kwa">fi</span>
+    <span class="hl kwa">done</span>
+    <span class="hl kwc">rm</span> tmp<span class="hl opt">* &gt;&amp; /</span>dev<span class="hl opt">/</span>null 
+<span class="hl opt">}</span>
+<span class="hl slc">####### function dodockfiles ENDS ##########################################</span>
 
 
-echo "options:"
-echo " CENTER -->      x =" $x " y =" $y " z =" $z
-echo " grid = " $g "   npts =" $p  "   rounds =" $n
-echo " Flexible residues -->  " $f
+<span class="hl kwb">echo</span> <span class="hl str">&quot;options:&quot;</span>
+<span class="hl kwb">echo</span> <span class="hl str">&quot; CENTER --&gt;      x =&quot;</span> <span class="hl kwd">$x</span> <span class="hl str">&quot; y =&quot;</span> <span class="hl kwd">$y</span> <span class="hl str">&quot; z =&quot;</span> <span class="hl kwd">$z</span>
+<span class="hl kwb">echo</span> <span class="hl str">&quot; grid = &quot;</span> <span class="hl kwd">$g</span> <span class="hl str">&quot;   npts =&quot;</span> <span class="hl kwd">$p</span>  <span class="hl str">&quot;   rounds =&quot;</span> <span class="hl kwd">$n</span>
+<span class="hl kwb">echo</span> <span class="hl str">&quot; Flexible residues --&gt;  &quot;</span> <span class="hl kwd">$f</span>
 
-if [ $# == "0" ] ; then 
-    echo ""
-    echo "This script find best docking pose of a ligand to a receptor using Autodock4 "
-    echo ""
-    echo " Syntax: docking.bash  -l ligand -r receptor  [ opt ]"
-    echo "          where  'ligand' assumes that file ligand.pdb exist"
-    echo "                 'receptor' assumes that file receptor.pdb exist"
-    echo "          "
-    echo "          Options:"
-    echo "          -x xcord -y ycord -z zcord "
-    echo "          Specifies the ocking center on the receptor"
-    echo "          "
-    echo "          -n nrounds"
-    echo "          Specifies the number of Docking rounds (default 50)"
-    echo "          "
-    echo "          -g gridspace"
-    echo "          Specifies 40x40x40 grid spacing (default 0.375) "
-    echo "          -p NP "
-    echo "          Specifies  NP x NP x NP point with def grid spacing (default 0.375) "
-    echo "          -f list "
-    echo "          Specifies flexible residues in the protein (list must be enclosed in ellypsis) "
-    echo "          Example:  docking.bash -l lig -r rec [..] -f \"ARG4_GLU290\"  "
-    echo "          -d dlg-file "
-    echo "           read the dlg file and produce best docked complex and best 10 dockes states "
-    exit
-fi
+<span class="hl kwa">if</span> <span class="hl opt">[</span> <span class="hl kwd">$#</span> <span class="hl opt">==</span> <span class="hl str">&quot;0&quot;</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;This script find best docking pose of a ligand to a receptor using Autodock4 &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; Syntax: docking.bash  -l ligand -r receptor  [ opt ]&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          where  'ligand' assumes that file ligand.pdb exist&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;                 'receptor' assumes that file receptor.pdb exist&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          Options:&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          -x xcord -y ycord -z zcord &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          Specifies the ocking center on the receptor&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          -n nrounds&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          Specifies the number of Docking rounds (default 50)&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          -g gridspace&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          Specifies 40x40x40 grid spacing (default 0.375) &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          -p NP &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          Specifies  NP x NP x NP point with def grid spacing (default 0.375) &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          -f list &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          Specifies flexible residues in the protein (list must be enclosed in ellypsis) &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          Example:  docking.bash -l lig -r rec [..] -f</span> <span class="hl esc">\&quot;</span><span class="hl str">ARG4_GLU290</span><span class="hl esc">\&quot;</span>  <span class="hl str">&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          -d dlg-file &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;           read the dlg file and produce best docked complex and best 10 dockes states &quot;</span>
+    <span class="hl kwb">exit</span>
+<span class="hl kwa">fi</span>
 
-# if $d is set the read the dlg file and exit
-if [[ ! -z $d ]]; then
-    if [ -f $d ] ; then
-	echo "Process dlg file and the exit "
-	dodockfiles $d
-	exit
-    else
-	echo "cannot fine file $d"
-	exit
-    fi
-fi
-
-
-if [[ ! -v ligand  ]] ; then
-    echo " Syntax: docking.bash  -l ligand -r receptor"
-    echo " ligand not provided; provide filename of the ligand " 
-    exit
-fi
-if [[ ! -v receptor ]] ; then
-    echo " Syntax: docking.bash  -l ligand -r receptor"
-    echo " receptor not provided; provide filename of the receptor " 
-    exit
-fi
-if [ ! -f $ligand.pdb  ]; then
-    echo "file" $ligand.pdb " not found"
-    exit
-fi
-if [ ! -f $receptor.pdb  ]; then
-    echo "file" $receptor.pdb " not found"
-    exit
-fi
-
-echo " Generating ligand and receptor pdbqt file "
-
-$pysh  $plig -l $ligand.pdb    >& /dev/null
-$pysh  $prec -r $receptor.pdb >& /dev/null
-
-echo " Preparing the receptor gpf file"
-
-if [[ ! -z $f ]] ; then
-    # flexible residues are present
-    $pysh $pfle -r $receptor.pdbqt -s $f >& /dev/null
-    flex=${receptor}_flex.pdbqt 
-    receptor=${receptor}_rigid
-    $pysh $pgrid  -l $ligand.pdbqt -x $flex -r $receptor.pdbqt >& /dev/null
-else
-    # fully rigid receptor
-    $pysh $pgrid  -l $ligand.pdbqt  -r $receptor.pdbqt >& /dev/null
-fi
+<span class="hl slc"># if $d is set the read the dlg file and exit</span>
+<span class="hl kwa">if</span> <span class="hl opt">[[ ! -</span>z <span class="hl kwd">$d</span> <span class="hl opt">]];</span> <span class="hl kwa">then</span>
+    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>f <span class="hl kwd">$d</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	<span class="hl kwb">echo</span> <span class="hl str">&quot;Process dlg file and the exit &quot;</span>
+	dodockfiles <span class="hl kwd">$d</span>
+	<span class="hl kwb">exit</span>
+    <span class="hl kwa">else</span>
+	<span class="hl kwb">echo</span> <span class="hl str">&quot;cannot fine file</span> <span class="hl ipl">$d</span><span class="hl str">&quot;</span>
+	<span class="hl kwb">exit</span>
+    <span class="hl kwa">fi</span>
+<span class="hl kwa">fi</span>
 
 
-# put the box center in the dpf file if this is given
-if [ -v x -a -v y -a -v z ] ; then
-    sed -i "s/gridcenter auto/gridcenter $x $y $z/g" $receptor.gpf  
-fi
+<span class="hl kwa">if</span> <span class="hl opt">[[ ! -</span>v ligand  <span class="hl opt">]] ;</span> <span class="hl kwa">then</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; Syntax: docking.bash  -l ligand -r receptor&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; ligand not provided; provide filename of the ligand &quot;</span> 
+    <span class="hl kwb">exit</span>
+<span class="hl kwa">fi</span>
+<span class="hl kwa">if</span> <span class="hl opt">[[ ! -</span>v receptor <span class="hl opt">]] ;</span> <span class="hl kwa">then</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; Syntax: docking.bash  -l ligand -r receptor&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; receptor not provided; provide filename of the receptor &quot;</span> 
+    <span class="hl kwb">exit</span>
+<span class="hl kwa">fi</span>
+<span class="hl kwa">if</span> <span class="hl opt">[ ! -</span>f <span class="hl kwd">$ligand</span>.pdb  <span class="hl opt">];</span> <span class="hl kwa">then</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;file&quot;</span> <span class="hl kwd">$ligand</span>.pdb <span class="hl str">&quot; not found&quot;</span>
+    <span class="hl kwb">exit</span>
+<span class="hl kwa">fi</span>
+<span class="hl kwa">if</span> <span class="hl opt">[ ! -</span>f <span class="hl kwd">$receptor</span>.pdb  <span class="hl opt">];</span> <span class="hl kwa">then</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;file&quot;</span> <span class="hl kwd">$receptor</span>.pdb <span class="hl str">&quot; not found&quot;</span>
+    <span class="hl kwb">exit</span>
+<span class="hl kwa">fi</span>
 
-# set grid spacing 
-sed -i "s/spacing 0.375/spacing $g/g" $receptor.gpf  
-sed -i "s/npts 40 40 40/npts $p $p $p/g" $receptor.gpf  
+<span class="hl kwb">echo</span> <span class="hl str">&quot; Generating ligand and receptor pdbqt file &quot;</span>
 
-echo " Generating maps "
-autogrid4 -p $receptor.gpf -l $receptor.glg 
+<span class="hl kwd">$pysh  $plig</span> <span class="hl opt">-</span>l <span class="hl kwd">$ligand</span>.pdb    <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwd">$pysh  $prec</span> <span class="hl opt">-</span>r <span class="hl kwd">$receptor</span>.pdb <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
 
-#Preparing the Docking parameter file 
+<span class="hl kwb">echo</span> <span class="hl str">&quot; Preparing the receptor gpf file&quot;</span>
 
-$pysh  $ppar -l $ligand.pdbqt -r $receptor.pdbqt >& /dev/null
-sed -i "s/ga_run 10/ga_run $n/" ${ligand}_${receptor}.dpf
+<span class="hl kwa">if</span> <span class="hl opt">[[ ! -</span>z <span class="hl kwd">$f</span> <span class="hl opt">]] ;</span> <span class="hl kwa">then</span>
+    <span class="hl slc"># flexible residues are present</span>
+    <span class="hl kwd">$pysh $pfle</span> <span class="hl opt">-</span>r <span class="hl kwd">$receptor</span>.pdbqt <span class="hl opt">-</span>s <span class="hl kwd">$f</span> <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+    flex<span class="hl opt">=</span><span class="hl kwd">${receptor}</span>_flex.pdbqt 
+    receptor<span class="hl opt">=</span><span class="hl kwd">${receptor}</span>_rigid
+    <span class="hl kwd">$pysh $pgrid</span>  <span class="hl opt">-</span>l <span class="hl kwd">$ligand</span>.pdbqt <span class="hl opt">-</span>x <span class="hl kwd">$flex</span> <span class="hl opt">-</span>r <span class="hl kwd">$receptor</span>.pdbqt <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwa">else</span>
+    <span class="hl slc"># fully rigid receptor</span>
+    <span class="hl kwd">$pysh $pgrid</span>  <span class="hl opt">-</span>l <span class="hl kwd">$ligand</span>.pdbqt  <span class="hl opt">-</span>r <span class="hl kwd">$receptor</span>.pdbqt <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwa">fi</span>
 
-# fix extedended issue
-sed -i "s/model extended/model bound/" ${ligand}_${receptor}.dpf
 
-# if $f is non-void, add flexres and flx_res atom_types to the dpf file
-if [[ ! -z $f ]] ; then
-    awk -v ffile=$flex '{print}END{print "flexres " ffile}' ${ligand}_${receptor}.dpf > tmp;
-    str=`grep -e "^map" $receptor.gpf | awk -F "." '{ printf "%3s",$2}'`
-    grep -e "^map" $receptor.gpf > tmp.maps
-    nmaps=`wc -l tmp.maps | awk '{print $1}'`
-#   update the maps lines in dpf 
-    awk -v str="$str" -v nm=$nmaps\
-     '{\
-         if($1=="ligand_types") {\
-     	print $1,str\
-         }\
-         else\
-         {\
-     	if(NR>nm) {\
-     	    if($1=="fld") {\
-     		print $0;\
-     		for (i=1; i<=nm; i++) {\
-     		    print "map " mapn[i]\
-     		}\
-     	    }\
-     	    else {\
-     		if($1 !="map") {print};\
-     	    }\
-     	}\
-     	else{\
-     	    mapn[NR]=$2;\
-     	}\
-         }\
-     }'\
-     tmp.maps tmp > ${ligand}_${receptor}.dpf 
-fi
+<span class="hl slc"># put the box center in the dpf file if this is given</span>
+<span class="hl kwa">if</span> <span class="hl opt">[ -</span>v x <span class="hl opt">-</span>a <span class="hl opt">-</span>v y <span class="hl opt">-</span>a <span class="hl opt">-</span>v z <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+    <span class="hl kwc">sed</span> <span class="hl opt">-</span>i <span class="hl str">&quot;s/gridcenter auto/gridcenter</span> <span class="hl ipl">$x</span> <span class="hl str"></span><span class="hl ipl">$y</span> <span class="hl str"></span><span class="hl ipl">$z</span><span class="hl str">/g&quot;</span> <span class="hl kwd">$receptor</span>.gpf  
+<span class="hl kwa">fi</span>
 
-# All is done. We can run autodock 
-echo " Docking... (may take some time) "
-autodock4 -p ${ligand}_${receptor}.dpf -l ${ligand}_${receptor}.dlg
+<span class="hl slc"># set grid spacing </span>
+<span class="hl kwc">sed</span> <span class="hl opt">-</span>i <span class="hl str">&quot;s/spacing 0.375/spacing</span> <span class="hl ipl">$g</span><span class="hl str">/g&quot;</span> <span class="hl kwd">$receptor</span>.gpf  
+<span class="hl kwc">sed</span> <span class="hl opt">-</span>i <span class="hl str">&quot;s/npts 40 40 40/npts</span> <span class="hl ipl">$p</span> <span class="hl str"></span><span class="hl ipl">$p</span> <span class="hl str"></span><span class="hl ipl">$p</span><span class="hl str">/g&quot;</span> <span class="hl kwd">$receptor</span>.gpf  
 
-d=${ligand}_${receptor}.dlg
+<span class="hl kwb">echo</span> <span class="hl str">&quot; Generating maps &quot;</span>
+autogrid4 <span class="hl opt">-</span>p <span class="hl kwd">$receptor</span>.gpf <span class="hl opt">-</span>l <span class="hl kwd">$receptor</span>.glg 
 
-dodockfiles $d  #call the function that printout dock files  
+<span class="hl slc">#Preparing the Docking parameter file </span>
 
-exit
+<span class="hl kwd">$pysh  $ppar</span> <span class="hl opt">-</span>l <span class="hl kwd">$ligand</span>.pdbqt <span class="hl opt">-</span>r <span class="hl kwd">$receptor</span>.pdbqt <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwc">sed</span> <span class="hl opt">-</span>i <span class="hl str">&quot;s/ga_run 10/ga_run</span> <span class="hl ipl">$n</span><span class="hl str">/&quot;</span> <span class="hl kwd">${ligand}</span>_<span class="hl kwd">${receptor}</span>.dpf
+
+<span class="hl slc"># fix extedended issue</span>
+<span class="hl kwc">sed</span> <span class="hl opt">-</span>i <span class="hl str">&quot;s/model extended/model bound/&quot;</span> <span class="hl kwd">${ligand}</span>_<span class="hl kwd">${receptor}</span>.dpf
+
+<span class="hl slc"># if $f is non-void, add flexres and flx_res atom_types to the dpf file</span>
+<span class="hl kwa">if</span> <span class="hl opt">[[ ! -</span>z <span class="hl kwd">$f</span> <span class="hl opt">]] ;</span> <span class="hl kwa">then</span>
+    <span class="hl kwc">awk</span> <span class="hl opt">-</span>v ffile<span class="hl opt">=</span><span class="hl kwd">$flex</span> <span class="hl str">'{print}END{print &quot;flexres &quot; ffile}'</span> <span class="hl kwd">${ligand}</span>_<span class="hl kwd">${receptor}</span>.dpf <span class="hl opt">&gt;</span> tmp<span class="hl opt">;</span>
+    str<span class="hl opt">=</span><span class="hl str">`grep -e &quot;^map&quot;</span> <span class="hl ipl">$receptor</span><span class="hl str">.gpf | awk -F &quot;.&quot; '{ printf &quot;%3s&quot;,</span><span class="hl ipl">$2</span><span class="hl str">}'`</span>
+    <span class="hl kwc">grep</span> <span class="hl opt">-</span>e <span class="hl str">&quot;^map&quot;</span> <span class="hl kwd">$receptor</span>.gpf <span class="hl opt">&gt;</span> tmp.maps
+    nmaps<span class="hl opt">=</span><span class="hl str">`wc -l tmp.maps | awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>
+<span class="hl slc">#   update the maps lines in dpf </span>
+    <span class="hl kwc">awk</span> <span class="hl opt">-</span>v str<span class="hl opt">=</span><span class="hl str">&quot;</span><span class="hl ipl">$str</span><span class="hl str">&quot;</span> <span class="hl opt">-</span>v nm<span class="hl opt">=</span><span class="hl kwd">$nmaps</span>\
+     <span class="hl str">'{\</span>
+<span class="hl str">         if(</span><span class="hl ipl">$1</span><span class="hl str">==&quot;ligand_types&quot;) {\</span>
+<span class="hl str">     	print</span> <span class="hl ipl">$1</span><span class="hl str">,str\</span>
+<span class="hl str">         }\</span>
+<span class="hl str">         else\</span>
+<span class="hl str">         {\</span>
+<span class="hl str">     	if(NR&gt;nm) {\</span>
+<span class="hl str">     	    if(</span><span class="hl ipl">$1</span><span class="hl str">==&quot;fld&quot;) {\</span>
+<span class="hl str">     		print</span> <span class="hl ipl">$0</span><span class="hl str">;\</span>
+<span class="hl str">     		for (i=1; i&lt;=nm; i++) {\</span>
+<span class="hl str">     		    print &quot;map &quot; mapn[i]\</span>
+<span class="hl str">     		}\</span>
+<span class="hl str">     	    }\</span>
+<span class="hl str">     	    else {\</span>
+<span class="hl str">     		if(</span><span class="hl ipl">$1</span> <span class="hl str">!=&quot;map&quot;) {print};\</span>
+<span class="hl str">     	    }\</span>
+<span class="hl str">     	}\</span>
+<span class="hl str">     	else{\</span>
+<span class="hl str">     	    mapn[NR]=</span><span class="hl ipl">$2</span><span class="hl str">;\</span>
+<span class="hl str">     	}\</span>
+<span class="hl str">         }\</span>
+<span class="hl str">     }'</span>\
+     tmp.maps tmp <span class="hl opt">&gt;</span> <span class="hl kwd">${ligand}</span>_<span class="hl kwd">${receptor}</span>.dpf 
+<span class="hl kwa">fi</span>
+
+<span class="hl slc"># All is done. We can run autodock </span>
+<span class="hl kwb">echo</span> <span class="hl str">&quot; Docking... (may take some time) &quot;</span>
+autodock4 <span class="hl opt">-</span>p <span class="hl kwd">${ligand}</span>_<span class="hl kwd">${receptor}</span>.dpf <span class="hl opt">-</span>l <span class="hl kwd">${ligand}</span>_<span class="hl kwd">${receptor}</span>.dlg
+
+d<span class="hl opt">=</span><span class="hl kwd">${ligand}</span>_<span class="hl kwd">${receptor}</span>.dlg
+
+dodockfiles <span class="hl kwd">$d</span>  <span class="hl slc">#call the function that printout dock files  </span>
+
+<span class="hl kwb">exit</span>
+
 </pre>
+</body>
+</html>
+<!--HTML generated by highlight 3.18, http://www.andre-simon.de/-->
