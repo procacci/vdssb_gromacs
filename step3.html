@@ -114,12 +114,12 @@ the commands:
 <p style="text-align:justify">The <a href="step3/bound_slurm.html"> bound-state</a>
 and <a href="step3/unbound_slurm.html"> unbound-state</a> jobs requests 36
 nodes (144 Nvidia VOLTA GPUs) and 8 nodes (32 Nvidia VOLTA GPUs),
-respectively.  The job relative to the bound state produces about 142
-ns on the target state in 24 wall clock hours, running six replicates
+respectively.  The job relative to the bound state produces about 3.5 microseconds 
+of simulation in total (142 ns on the target state) in 24 wall clock hours, running six replicates
 of 24-replica exchange simulation involving a <i> hot-zone </i>  including the
 ligand and nearby residues. The job relative to the unbound state requests
-8 nodes (32 Nvidia VOLTA GPUs) and produces 32
-ns on the target state in 5/6 wall clock hours, running four replicates
+8 nodes (32 Nvidia VOLTA GPUs) and produces abount 250 ns  in total (32
+ns on the target state) in 4/5 wall clock hours, running four replicates
 of 8-replica exchange simulation with torsional trempering of the full
   ligand.</p><br>
 
