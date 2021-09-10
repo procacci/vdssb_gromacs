@@ -46,13 +46,13 @@
      </div>
 <h1 id="step-3-hrem-simulations-hpc">Step 3:  HREM simulations (HPC) </h1>
 Copy the two directories <code>
-  3clp_HREM_OUT </code> and <code> LIG_only_ligand_HREM_OUT</code></b> from
+  3clp_HREM </code> and <code> LIG_only_ligand_HREM</code></b> from
 your workstation to the remote HPC working directory. E.g. from the working directory
 where you launched the HPC_Drug command in <a href="step2.html"> Step 2</a>,  just issue 
 
 <pre>
-  scp -r 3clp_HREM_OUT user@hpcaddress:USERHOME
-  scp -r LIG_only_ligand_HREM_OUT user@hpcaddress:USERHOME
+  scp -r 3clp_HREM user@hpcaddress:USERHOME
+  scp -r LIG_only_ligand_HREM user@hpcaddress:USERHOME
 </pre>
 
 where <code> user@hpcaddress </code> is the username and
@@ -89,8 +89,8 @@ submit you parallel jobs for vDSSB enhanced sampling on the HPC.
 To this end, in <a href="step2.html"> Step 2</a>, HPC_Drug also
 generated, in each of the two directories
 <code>
-  3clp_HREM_OUT </code> and <code>
-LIG_only_ligand_HREM_OUT</code></b>, two tentative batch files for HPC
+  3clp_HREM </code> and <code>
+LIG_only_ligand_HREM</code></b>, two tentative batch files for HPC
 submission, based on the syntax of the
 <a href="https://slurm.schedmd.com/sbatch.html"> SLURM</a> workload
 manager.  These two SLURM submission files,
