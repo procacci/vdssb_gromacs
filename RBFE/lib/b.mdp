@@ -1,3 +1,4 @@
+<code>
 ;
 ;	File 'mdout.mdp' was generated
 ;	By user: marina (1000)
@@ -179,3 +180,4 @@ pull-coord1-start       = yes
 pull-coord1-init       = 0.0
 pull-coord1-rate       = 0
 pull-coord1-k          = 837
+</code>
