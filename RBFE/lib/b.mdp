@@ -32,7 +32,7 @@ comm-grps                =
 ; TEST PARTICLE INSERTION OPTIONS
 rtpi                     = 0.05
 
-; OUTPUT CONTROL OPTIONS
+; OUTPUT CONTROL OPTIONS 
 ; Output frequency for coords (x), velocities (v) and forces (f)
 nstxout                  = 10000
 nstvout                  = 10000
