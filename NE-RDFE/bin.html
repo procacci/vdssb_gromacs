@@ -1,0 +1,26 @@
+<pre>
+## Ancillary scripts for NE-RDFE calculations with gromacs
+
+combine.awk:            combines A(ghost/gas) data with B(coupled) in the bond or unbound states
+make_rbfe_dir.bash:     makes RDFE directories for launching parallel NE jobs.
+                        For usage,  issue the command with no args
+make_tables.awk:        makes nicer tables of RDFE estimates
+maketpr.bash:           makes the multi-dir with tpr files for NE transitions
+                        For usage,  issue the command with "-h" option
+RDFE.bash:              processes the dhdl.xvg files and compute work data.
+                        For usage,  issue the command with no args
+SOURCE_THIS_FILE.bash:  source this file to make the scripts available
+submit.slr:             submit (slurm) script for the parallel NE job
+submit.bash:            generates the submit.slr script in the working directory.
+                        For usage, issue the command with no args
+
+## this scripts are used by the main 'RDFE.bash' script 
+
+free.awk:               computes moments from work data
+Free_bs.awk:            computes Gaussian and Jarzynski estimates with error from work data
+kurt+skew.bash:         computes moments from work data with errors 
+Q-Q.f90:                FORTRAN code for Anderson Darling test
+bennett.f90:            FORTRAN code for BAR 
+zscore_rec.awk:         eliminates outliers from work data
+bs_rec.awk:             boots-trapper for 'Free_bs.awk' and  'kurt+skew.bash'
+</pre> 

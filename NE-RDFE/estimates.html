@@ -1,0 +1,31 @@
+
+TABLE_RBFE contains computed rbfe for the SAMPL9 challenge. The raw <code> dhdl.xvg </code> data
+produced in step 3 were processed in step 4 with the script <code> RBFE.bash </code> (see syntax by issuing the command with no args) 
+All values for rbfe are in kcal/mol
+<br> 
+Meaning of the entries  in the Table
+<ul> 
+<li> DG_bar -> BAR-computed RBFE
+<li> DG_BAR -> v-DSSB-BAR-computed RBFE
+<li> DG_ff_G -> Gaussian forward (bound) forward (unbound) RBFE
+<li> DG_ff_J -> Jarzynski forward (bound) forward (unbound) RBFE
+<li> DG_rr_G -> Gaussian reverse (bound) reverse (unbound) RBFE
+<li> DG_rr_J -> Jarzynski reverse (bound) reverse (unbound) RBFE
+<li> DG_fr_G -> Gaussian forward  (bound) reverse (unbound) RBFE
+<li> DG_fr_J -> Jarzynski forward  (bound) reverse (unbound) RBFE
+<li> DG_rf_G -> Gaussian reverse   (bound) forward  (unbound) RBFE
+<li> DG_rf_J -> Jarzynski reverse  (bound) forward  (unbound) RBFE
+<li> sig_AB_u -> P(W) standard dev for the AB (unbound) process
+<li> sig_AB_b -> P(W) standard dev for the AB (bound) process
+<li> ADT_AB_u -> Anderson Darling test for the AB (unbound) process
+<li> ADT_AB_b -> Anderson Darling test for the AB (bound) process
+</ul>
+
+The file <code> fields_to_print </code> in the directory <code>
+data </data> contains an example of the entries of <code> TABLE_RBFE </code> you may
+want to tabulate.
+<br> 
+To get a cuter table based on the fields of your choice,  just vissue the following command:
+<pre>
+$ cat fields TABLE_RBFE | make_table.awk 
+</pre> 

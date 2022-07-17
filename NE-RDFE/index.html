@@ -1,1 +1,213 @@
+<h2> Tutorial for relative dissociation  free energy calculations in GROMACS between
+  dissimilar molecules using bidirectional nonequilibrium dual
+  topology schemes </h2>  
 
+<center> <img src="FSDAMgromacs.png" alt="vDSSB in GROMACS" width="600" height="323"></center> <br>
+
+<p style="text-align:justify"> This is a technical tutorial for the
+calculation of the relative dissociation free energies (RDFE) for the
+<a href="https://github.com/samplchallenges/SAMPL9/tree/main/host_guest/WP6">
+SAMPL9/WP6 host-guest systems </a> on high performing architectures
+using a nonequilibrium alchemical approach with the GROMACS code. The
+theoretical background of the methodology can be
+found <a href="https://pubs.acs.org/doi/full/10.1021/acs.jctc.2c00295">
+here </a>. As an example, we shall calculate the the RDFE between the
+compounds <a href=g1g2.png> <b> g01-g02 </b> </a>, two chemically
+distant ligands, differing in charge, shape, volume and with a small Tanimoto index.  
+<br>
+
+<h3>1. Downloading paraphernalia for NE-RDFE with gromacs  </h3> 
+<ul> 
+  <li> Download and unzip the NE-RDFE <a href="https://zenodo.org/record/6850702"> Zenodo archive </a>     and go into the NE-RDFE main directory.
+
+  <li>   Here,  each of
+  the thirteen directories for the guests of the SAMPL9/WP6 challenge
+  (<code>g01, g02, ..., g13</code>)  contain three subdirectories
+  (<code>b, u, g</code>) where we stored the PDB configurations of the WP6-bound
+  guest (200), of the guest in bulk solvent (125), and of the
+  gas-phase (200) guest.  These decorrelated
+  equilibrium conformations for the end-states can be obtained with
+  replicates of ordinary MD simulations or using Hamiltonian Replica
+  Exchange. For using HREM with GROMACS in ligand-protein or
+  host-guest systems, see the excellent 
+  <code> PLUMED </code>  <a href="https://www.plumed.org/doc-v2.6/user-doc/html/hrex.html"> tutorial </a> at the
+  <code> PLUMED </code> official site or go thorugh the <a href="https://procacci.github.io/vdssb_gromacs/step2.html">  tutorial
+    </a> for absolute dissociation free energy calculations with <a href="https://pubs.acs.org/doi/10.1021/acs.jcim.1c00909"> vDSSB <a> in GROMACS. 
+
+  
+
+  
+  <li> The directory <a href="lib/index.html" >
+  lib </a> contains the <a href="http://www1.chim.unifi.it/orac/primadorac">
+  PrimaDORAC</a>-generated
+  <code> itp </code> files of the host and of the guest, and of <a href="https://aip.scitation.org/doi/10.1063/1.4960175">OPC3 </a> water.  
+  <li> The directory <code> bin </code> contains ancillary scripts for pre- and post- processing.
+  <li> The directory <code> data </code> contains gromacs-computed RDFEs for the SAMPL9 batch.
+  <li> The directory  <code>workdata_example</code>  contains example of work data.
+  <li> The directory  <code>doc</code>  contains this tutorial.
+</ul>
+<h3>2. Preparing the dual topology directories for RDFE calculation on an HPC  </h3> 
+<ul>
+<li> Go into the <code> bin </code> directory and issue the command
+  <pre>
+    $ source SOURCE_THIS_FILE.bash
+  </pre>
+  This will activate all the scripts in the directory. N.B. <code> gfortran </code> and <code> gromacs </code> must be installed.
+<li> To generate and customize a working directory where, e.g., <b>g01</b> is transformed to <b>g02</b>, 
+  go back to the main NE-RDFE dir and issue the commands
+  <pre>
+    $ make_rbfe_dir.bash g01 g02 b
+    $ make_rbfe_dir.bash g01 g02 u
+  </pre>
+  This will produce the directories <code> b-g01-g02 </code>
+  and <code> u-g01-g02 </code> with topology files for the dual <b>
+  g01-g02 </b> topology and the starting configurations (PDB files
+  stored in the new <code> b-g01-PDBS </code> and <code>
+  u-g01-PDBS </code> subdirectories) with ghost and the ligand in the
+  bound and unbound states, respectively. Note that you do not need to
+  run an <i> equilibrium</i> simulation with the ghost and the fully
+  coupled ligand to produce the starting states for the NE alchemical
+  transitions. These initial states can be straightforwardly obtained by
+  combining equilibrium configurations of the gas-phase ghost with
+  equilibrium configuration of the fully coupled (bound or unbound)
+  ligand, by making coincident the centers of mass of the two ligands.
+  This is precisely what <code>make_rbfe_dir.bash</code> does using the
+  conformations in the <code> g??/[gub] </code> directories.  
+  
+<li> Now go into the <code> b-g01-g02 </code> and issue the command
+<pre>
+  $ maketpr.bash
+</pre>
+If everything is OK, you should see a list of ending quotes from
+gromacs.  This will produce 200 subdirectories with the
+corresponding <code>topol.tpr</code> files for the bound state using the
+stored initial configurations in the
+<code> b-g01-PDBS </code> subdirectory. 
+
+<li> Go back to the main NE-RDFE dir and cd  into the <code> u-g01-g02 </code> directory and issue the command
+<pre>
+  $ maketpr.bash
+</pre> This will produce 125 subdirectories with
+the <code>tpol.tpr</code> files for the unbound state using the stored
+initial configurations in the
+<code> u-g01-PDBS </code> subdirectory. Again you should see a list of 125 random gromacs quotes on the standard output
+while the subdirectories are generated.  
+</ul>
+
+<h3> 3. Running the NE alchemical for RDFE transition on the HPC  </h3> 
+
+In the <code> bin</code> directory, we provide the
+code <code> make_submit_slr.bash </code> for generating
+a <a href="https://slurm.schedmd.com/documentation.html"> SLURM </a>
+submission script for the
+<a href="https://www.hpc.cineca.it/hardware/marconi100"> M100 </a> HPC
+   system at CINECA.
+</ul> 
+<li>   From the <code>
+   b-g01-g02 </code> directory issue the commands
+   <pre>
+     $ make_submit_slr.bash 50
+     $ sbatch submit.slr
+    </pre> 
+   This will generate and submit the submission script <a href="submitb.html"> <code> submit.slr </code> </a> requesting 50 nodes for
+     a total of 200 GPUs 
+<li>   From the <code>
+   u-g01-g02 </code> directory issue the commands
+   <pre>
+     $ make_submit_slr.bash 31
+     $ sbatch submit.slr
+    </pre> 
+   This will generate and submit the submission script <a href="submitu.html"> <code> submit.slr </code> </a>requesting 31 nodes for
+     a total of 124 GPUs 
+</ul>
+<h3> 4. Data post-processing  </h3> 
+
+
+Once the HPC jobs are completed, from  the main directory <code>NE-RDFE</code>,
+give the command
+<pre>
+  $ RDFE.bash -b 1000 -u 500 g01 g02 
+</pre>
+The application script <a href="RDFE.html"> <code>
+RDFE.bash </code> </a> (that you find in the <code>bin</code>
+directory) can be used to evaluate the work from the <code>
+dhdl.xvg </code> files produced in the previous step, as well as to
+compute the corresponding bidirectional estimates of the relative
+dissociation free energy.  The above command will produce the
+following files in a subdirectory named <code> Datarel </code>
+ <pre>
+   g01-g02_b_1000.wrk  g01-g02_u_500.wrk  g02-g01_b_1000.wrk  g02-g01_u_500.wrk
+  </pre> 
+ The name of these files are indicative of the pair, the state (bound o unboud) and the duration of transition specified in the
+ <a href="lib/b.mdp.html"> <code> b.mdp </code> </a>
+ and <a href="lib/u.mdp.html"> <code> u.mdp </code> </a> input files
+ (1000 ps for the bound state and 500 ps for the unbound state).
+These files are all you need to produce your estimate for the RDFE between     
+ the pair <b> g01-g02 </b>. From the main directory, re-issue  the <code> RDFE.bash </code>
+command with the option <code> -f </code> :
+<pre>
+  $ RDFE.bash -b 1000 -u 500 -f g01 g02 
+</pre>
+Here, <code> RDFE.bash </code> computes the RDFE for the transition of
+g02 (initially fully coupled) to g01 (initially fully deoupled). For usage
+of the <code> RDFE.bash </code> script, just issue the command with no argumets or options.  
+of You
+will get on the standard output a line with something like
+<pre>
+Dir=Datarel  Sign=1  Time_u=500  Time_b=1000  xs =3.3
+g02->g01   DG_bar=   -4.71   0.41  DG_ff_G=   -5.4   0.8  DG_ff_J=   -4.7   0.4  sig_AB_u=  0.80 sig_AB_b=  2.12 ADT_AB_u=  0.30 ADT_AB_b=  0.65 DG_rr_G=   -1.8   1.2  DG_rr_J=   -4.3   0.5  sig_BA_u=  1.23 sig_BA_b=  2.96 ADT_BA_u=  3.18 ADT_BA_b=  0.23  DG_fr_G=  -5.85  0.65  DG_fr_J=  -4.45  0.28 bias_fr=  0.0  DG_rf_G=  -1.50  1.14  DG_rf_J=  -5.53  0.55 bias_rf=  0.9 DG_BAR=  -4.61 0.0 tb= 1000 tu=  500
+</pre> The first entry, <code> DG_bar= -4.71 </code>, refers to
+the <a href="http://www.alchemistry.org/wiki/Bennett_Acceptance_Ratio">
+BAR </a> computed RDFE in kcal/mol  bewteen <b>g01</b> and <b>g02</b>. The negative value
+indicates that <b> g02 </b> is a <i> stronger binder </i> than <b>
+g01 </b>.  There is no need for further correction to this RDFE, as
+GROMACS automatically accounts in the <code> dhdl </code> derivatives
+for the volume-dependent contribution due to the charge change in the
+alchemical transition (more specifically, this contribution is
+evaluated via the function <code> ewald_charge_correction </code> in
+the <code> ewald </code> module of the GROMACS code).
+<br> The output of the <code> RDFE.bash </code> command contains a lot
+of info and looks pretty awkward indeed.  The meaning of the various
+entries is described <a href="estimates.html"> here </a>.  To get a
+nicer output, save the output of the <code> RDFE.bash </code> command
+to a file (e.g. <code> TABLE </code>), make a file
+(e.g. <code>fields</code>) with the entries (e.g. <code>DG_bar DG_ff_J
+DG_rr_J sig_AB_b sig_BA_b sig_AB_u sig_BA_u</code>) that you want to
+tabulate and issue the command
+<pre> 
+ cat fields TABLE | make_table.awk 
+</pre>
+If you do so on the full table (<code>TABLE_RDFE</code> that you find
+in the <code>data</code> directory)  listing 21 RDFEs involving the
+thirteen guests of the SAMPL9 challenge, you will get
+this <a href="table.html"> output </a>.  There, we have chosen to
+print the BAR bidirectional estimate, the Jarzinky RDFE estimate for
+the forward process (namely g02 into g01 ), the Jarzynski estimate
+from the reverse process, the standard deviation forward and reverse
+in the bound and unbound states. These latter quantities are related
+to the dissipation of the processe and ultimately to the uncertainty
+on the estimates.
+
+<h3> NE-RDFE in a (unix) nutshell </h3> 
+<br> 
+In the following we provide the full sequence of the commands to compute a NE-RDFE on the M100 HPC system: 
+<pre>
+  unzip NE-RDFE.zip
+  cd NE-RDFE
+  cd bin
+  source SOURCE_THIS_FILE.bash   
+  cd ../
+  make_rbfe_dir.bash g01 g02 b
+  make_rbfe_dir.bash g01 g02 u
+  cd b-g01-g02
+  maketpr.bash
+  make_submit_slr.bash 50
+  sbatch submit.slr
+  cd ../u-g01-g02
+  maketpr.bash 
+  make_submit_slr.bash 31
+  sbatch submit.slr
+  cd ../
+ # wait for HPC jobs to finish
+  RDFE.bash -b 1000 -u 500 -f g01 g02
+  </pre> 

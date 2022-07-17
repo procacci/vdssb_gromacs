@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>RBFE.bash</title>
+<link rel="stylesheet" type="text/css" href="highlight.css">
+</head>
+<body class="hl">
+<pre class="hl">
+<span class="hl slc">#!/bin/bash</span>
+
+<span class="hl kwa">if</span> <span class="hl opt">[ ! -</span>d Datarel <span class="hl opt">-</span>o <span class="hl kwd">$#</span> <span class="hl opt">-</span>eq <span class="hl num">0</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; Extract work data from [bu]xxxx  dirs and compute relative free energies&quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; for the transformation of noghost into ghost                      &quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; syntax: ../bin/RBFE.bash [opt] ghost noghost&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; ghost and noghost are the compound names of the molecule A (ghost)&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; to be transformed into B (noghost)&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; Options: &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;        -u timeu&quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          arg 'timeu' specify the duration time for the unbound state&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;        -b timeb&quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          arg 'timeb' specify the duration time for the bound state&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;        -f &quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          do only free energy calculations without extracting the workfiles (work files MUST be on Datarel directory) &quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;        -x out_threshold&quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          arg 'out_threshold' specify threshold (in sigmas) for outliers in work data; Default is 3.3&quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;        -s sign&quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          arg 'sign' specify the the sign to be used in the work calculation from the dhdl file&quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;        -D dir&quot;</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;          use dir instead of Datarel for work data &quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;&quot;</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; N.B: give this command from the github main dir&quot;</span>
+    <span class="hl kwa">if</span> <span class="hl opt">[ ! -</span>d Datarel <span class="hl opt">];</span> <span class="hl kwa">then</span>
+	mkdir Datarel
+    <span class="hl kwa">else</span>
+	<span class="hl kwb">exit</span>
+    <span class="hl kwa">fi</span>
+<span class="hl kwa">fi</span> 
+
+
+uw<span class="hl opt">=</span><span class="hl num">0</span>
+bw<span class="hl opt">=</span><span class="hl num">0</span>
+free<span class="hl opt">=</span><span class="hl num">0</span>
+ignore<span class="hl opt">=</span><span class="hl num">0</span>
+dirdata<span class="hl opt">=</span><span class="hl str">&quot;Datarel&quot;</span>
+tb<span class="hl opt">=</span><span class="hl num">720</span>
+s<span class="hl opt">=</span><span class="hl num">1</span>
+tu<span class="hl opt">=</span><span class="hl num">360</span>
+xs<span class="hl opt">=</span><span class="hl num">3.3</span>
+<span class="hl kwa">while</span> <span class="hl kwb">getopts</span> <span class="hl str">&quot;:u:b:x:s:foiD:&quot;</span> opt<span class="hl opt">;</span> <span class="hl kwa">do</span> 
+    <span class="hl kwa">case</span> <span class="hl kwd">$opt</span> <span class="hl kwa">in</span> 
+	u<span class="hl opt">)</span>
+	    uw<span class="hl opt">=</span><span class="hl num">1</span>
+	    tu<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span>
+	    <span class="hl opt">;;</span>
+	b<span class="hl opt">)</span>
+	    bw<span class="hl opt">=</span><span class="hl num">1</span>
+	    tb<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span>
+	    <span class="hl opt">;;</span>
+	x<span class="hl opt">)</span>
+	    xs<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span>
+	    <span class="hl opt">;;</span>
+	s<span class="hl opt">)</span>
+	    s<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span>
+	    <span class="hl opt">;;</span>
+	f<span class="hl opt">)</span> 
+	    free<span class="hl opt">=</span><span class="hl num">1</span>
+	    <span class="hl opt">;;</span>
+	D<span class="hl opt">)</span>
+	    dirdata<span class="hl opt">=</span><span class="hl kwd">$OPTARG</span>
+	    <span class="hl opt">;;</span>
+    <span class="hl kwa">esac</span>
+<span class="hl kwa">done</span>
+<span class="hl kwb">echo</span> <span class="hl str">&quot;Dir=&quot;</span><span class="hl kwd">$dirdata</span> <span class="hl str">&quot; Sign=&quot;</span><span class="hl kwd">$s</span> <span class="hl str">&quot; Time_u=&quot;</span><span class="hl kwd">$tu</span> <span class="hl str">&quot; Time_b=&quot;</span><span class="hl kwd">$tb</span> <span class="hl str">&quot; xs =&quot;</span><span class="hl kwd">$xs</span>
+
+A<span class="hl opt">=</span><span class="hl kwd">${!#}</span>                                        <span class="hl slc"># noghost</span>
+B<span class="hl opt">=</span><span class="hl str">`echo &quot;</span><span class="hl ipl">${&#64;: -2}</span><span class="hl str">&quot; | awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>         <span class="hl slc"># ghost </span>
+
+<span class="hl kwa">if</span> <span class="hl opt">[ -</span>z <span class="hl kwd">$A</span> <span class="hl opt">-</span>o <span class="hl opt">-</span>z <span class="hl kwd">$B</span> <span class="hl opt">];</span> <span class="hl kwa">then</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot; syntax: RBFE.bash [opt] ghost noghost&quot;</span>
+    <span class="hl kwb">exit</span>
+<span class="hl kwa">fi</span>
+
+zscore<span class="hl opt">=</span><span class="hl str">&quot;zscore_rec.awk -v xs=</span><span class="hl ipl">$xs</span><span class="hl str">&quot;</span>
+
+<span class="hl slc">#### FUNCTION DG BEGINS HERE : this code assumes that the wrk files have been generated and evaluates the RBFE as the difference DG_rel=(A-B)_bound-(A-B)_solv</span>
+<span class="hl kwa">function</span> rbfe <span class="hl opt">{</span>
+    <span class="hl kwb">printf</span> <span class="hl str">&quot;</span><span class="hl ipl">${A}</span><span class="hl str">-&gt;</span><span class="hl ipl">${B}</span>  <span class="hl str">&quot;</span>
+<span class="hl slc">#   BOUND</span>
+    <span class="hl kwa">for</span> i <span class="hl kwa">in</span> b u <span class="hl opt">;</span> <span class="hl kwa">do</span> 
+	<span class="hl kwa">if</span> <span class="hl opt">[</span> <span class="hl kwd">$i</span> <span class="hl opt">==</span> <span class="hl str">&quot;b&quot;</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span> t<span class="hl opt">=</span><span class="hl kwd">$tb</span> <span class="hl opt">;</span> <span class="hl kwa">fi</span>
+	<span class="hl kwa">if</span> <span class="hl opt">[</span> <span class="hl kwd">$i</span> <span class="hl opt">==</span> <span class="hl str">&quot;u&quot;</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span> t<span class="hl opt">=</span><span class="hl kwd">$tu</span> <span class="hl opt">;</span> <span class="hl kwa">fi</span>
+	<span class="hl kwa">if</span> <span class="hl opt">[ -</span>f <span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.wrk <span class="hl opt">-</span>a <span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.wrk <span class="hl opt">];</span> <span class="hl kwa">then</span> 
+	    <span class="hl kwd">$zscore ${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk
+	    <span class="hl kwd">$zscore ${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk
+	    Free_bs.bash <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk  <span class="hl opt">&gt;</span> DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>
+	    Free_bs.bash <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk  <span class="hl opt">&gt;</span> DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>
+	    <span class="hl kwc">awk</span> <span class="hl str">'{print</span>  <span class="hl ipl">$1</span><span class="hl str">/4.184}'</span> <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk | histog <span class="hl opt">+</span>i0.5  <span class="hl opt">&gt;</span> <span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.hst
+	    <span class="hl kwc">awk</span> <span class="hl str">'{print -</span><span class="hl ipl">$1</span><span class="hl str">/4.184}'</span> <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk | histog <span class="hl opt">+</span>i0.5  <span class="hl opt">&gt;</span> <span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.hst
+	    sig_AB<span class="hl opt">=</span><span class="hl str">`kurt+skew.bash</span> <span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$i</span><span class="hl str">.</span><span class="hl ipl">$t</span><span class="hl str">.wrk | awk '{print sqrt(</span><span class="hl ipl">$4</span><span class="hl str">)}'`</span>
+	    ADT_AB<span class="hl opt">=</span><span class="hl str">`qq</span> <span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$i</span><span class="hl str">.</span><span class="hl ipl">$t</span><span class="hl str">.wrk  | grep Anders | awk '{print</span> <span class="hl ipl">$8</span><span class="hl str">}'`</span> 
+	    <span class="hl kwb">echo</span> <span class="hl kwd">$sig_AB</span> <span class="hl opt">&gt;</span> SAB.<span class="hl kwd">$i</span>
+	    <span class="hl kwb">echo</span> <span class="hl kwd">$ADT_AB</span> <span class="hl opt">&gt;</span> AAB.<span class="hl kwd">$i</span>
+	    sig_BA<span class="hl opt">=</span><span class="hl str">`kurt+skew.bash</span> <span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$i</span><span class="hl str">.</span><span class="hl ipl">$t</span><span class="hl str">.wrk | awk '{print sqrt(</span><span class="hl ipl">$4</span><span class="hl str">)}'`</span>
+	    ADT_BA<span class="hl opt">=</span><span class="hl str">`qq</span> <span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$i</span><span class="hl str">.</span><span class="hl ipl">$t</span><span class="hl str">.wrk  | grep Anders | awk '{print</span> <span class="hl ipl">$8</span><span class="hl str">}'`</span> 
+	    <span class="hl kwb">echo</span> <span class="hl kwd">$sig_BA</span> <span class="hl opt">&gt;</span> SBA.<span class="hl kwd">$i</span>
+	    <span class="hl kwb">echo</span> <span class="hl kwd">$ADT_BA</span> <span class="hl opt">&gt;</span> ABA.<span class="hl kwd">$i</span>
+	    <span class="hl kwc">rm</span> DG.tmp.<span class="hl kwd">$i</span> <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+	    <span class="hl kwa">for</span> j <span class="hl kwa">in</span> <span class="hl opt">{</span><span class="hl num">1</span>.<span class="hl num">.40</span><span class="hl opt">};</span> <span class="hl kwa">do</span> 
+		bs_res.<span class="hl kwc">awk</span> <span class="hl opt">-</span>v seed<span class="hl opt">=</span><span class="hl kwd">$j $A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk <span class="hl opt">&gt;</span> works_forward 
+		bs_res.<span class="hl kwc">awk</span> <span class="hl opt">-</span>v seed<span class="hl opt">=</span><span class="hl kwd">$j $B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk <span class="hl opt">&gt;</span> works_reverse 
+		bennett | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$7</span><span class="hl str">}'</span> <span class="hl opt">&gt;&gt;</span> DG.tmp.<span class="hl kwd">$i</span>
+	    <span class="hl kwa">done</span>
+	    <span class="hl kwc">awk</span> <span class="hl str">'{a+=</span><span class="hl ipl">$1</span><span class="hl str">; a2+=</span><span class="hl ipl">$1</span><span class="hl str">^2}END{printf &quot;%8.2f%8.2f</span><span class="hl esc">\n</span><span class="hl str">&quot;, a/NR/4.184,1.96*sqrt(a2/NR -(a/NR)^2)/4.184}'</span> DG.tmp.<span class="hl kwd">$i</span> <span class="hl opt">&gt;</span> DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">${t}</span>_BAR
+	<span class="hl kwa">elif</span> <span class="hl opt">[ -</span>f <span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.wrk <span class="hl opt">];</span> <span class="hl kwa">then</span> 
+	    <span class="hl kwd">$zscore ${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk
+	    <span class="hl kwc">awk</span> <span class="hl str">'{print</span>  <span class="hl ipl">$1</span><span class="hl str">/4.184}'</span> <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk | histog <span class="hl opt">+</span>i0.5  <span class="hl opt">&gt;</span> <span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.hst
+	    Free_bs.bash <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk  <span class="hl opt">&gt;</span> DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>
+	    sig_AB<span class="hl opt">=</span><span class="hl str">`kurt+skew.bash</span> <span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$i</span><span class="hl str">.</span><span class="hl ipl">$t</span><span class="hl str">.wrk | awk '{print sqrt(</span><span class="hl ipl">$4</span><span class="hl str">)}'`</span>
+	    ADT_AB<span class="hl opt">=</span><span class="hl str">`qq</span> <span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$i</span><span class="hl str">.</span><span class="hl ipl">$t</span><span class="hl str">.wrk  | grep Anders | awk '{print</span> <span class="hl ipl">$8</span><span class="hl str">}'`</span> 
+	    <span class="hl kwb">echo</span> <span class="hl kwd">$sig_AB</span> <span class="hl opt">&gt;</span> SAB.<span class="hl kwd">$i</span>
+	    <span class="hl kwb">echo</span> <span class="hl kwd">$ADT_AB</span> <span class="hl opt">&gt;</span> AAB.<span class="hl kwd">$i</span>
+	<span class="hl kwa">elif</span> <span class="hl opt">[ -</span>f <span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.wrk <span class="hl opt">];</span> <span class="hl kwa">then</span> 
+	    <span class="hl kwd">$zscore ${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.wrk | <span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl str">&quot;#&quot;</span> <span class="hl opt">&gt;</span> <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk
+	    <span class="hl kwc">awk</span> <span class="hl str">'{print</span>  <span class="hl ipl">$1</span><span class="hl str">/4.184}'</span> <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk | histog <span class="hl opt">+</span>i0.5  <span class="hl opt">&gt;</span> <span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>.hst
+	    Free_bs.bash <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$i</span>.<span class="hl kwd">$t</span>.wrk  <span class="hl opt">&gt;</span> DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_<span class="hl kwd">${i}</span>_<span class="hl kwd">$t</span>
+	    sig_BA<span class="hl opt">=</span><span class="hl str">`kurt+skew.bash</span> <span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$i</span><span class="hl str">.</span><span class="hl ipl">$t</span><span class="hl str">.wrk | awk '{print sqrt(</span><span class="hl ipl">$4</span><span class="hl str">)}'`</span>
+	    ADT_BA<span class="hl opt">=</span><span class="hl str">`qq</span> <span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$i</span><span class="hl str">.</span><span class="hl ipl">$t</span><span class="hl str">.wrk  | grep Anders | awk '{print</span> <span class="hl ipl">$8</span><span class="hl str">}'`</span> 
+	    <span class="hl kwb">echo</span> <span class="hl kwd">$sig_BA</span> <span class="hl opt">&gt;</span> SBA.<span class="hl kwd">$i</span>
+	    <span class="hl kwb">echo</span> <span class="hl kwd">$ADT_BA</span> <span class="hl opt">&gt;</span> ABA.<span class="hl kwd">$i</span>
+	<span class="hl kwa">fi</span>
+    <span class="hl kwa">done</span>
+
+    <span class="hl slc"># bar </span>
+    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>s DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_b_<span class="hl kwd">${tb}</span>_BAR <span class="hl opt">-</span>a <span class="hl opt">-</span>s DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_u_<span class="hl kwd">${tu}</span>_BAR <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	<span class="hl kwc">paste</span> DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_b_<span class="hl kwd">${tb}</span>_BAR DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_u_<span class="hl kwd">${tu}</span>_BAR \
+	| <span class="hl kwc">awk</span> <span class="hl str">'{printf &quot; DG_bar= %7.2f%7.2f &quot;,</span><span class="hl ipl">$1</span><span class="hl str">-</span><span class="hl ipl">$3</span><span class="hl str">,sqrt(</span><span class="hl ipl">$2</span><span class="hl str">^2+</span><span class="hl ipl">$4</span><span class="hl str">^2)}'</span>
+    <span class="hl kwa">fi</span>
+    <span class="hl slc"># ff </span>
+    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>s DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_b_<span class="hl kwd">$tb</span> <span class="hl opt">-</span>a <span class="hl opt">-</span>s DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_u_<span class="hl kwd">$tu</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	<span class="hl kwc">paste</span> DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_b_<span class="hl kwd">$tb</span> DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_u_<span class="hl kwd">$tu</span> \
+	| <span class="hl kwc">awk</span> <span class="hl str">'{printf &quot; DG_ff_G= %6.1f%6.1f &quot;,</span><span class="hl ipl">$2</span><span class="hl str">-</span><span class="hl ipl">$7</span><span class="hl str">,sqrt(</span><span class="hl ipl">$3</span><span class="hl str">^2+</span><span class="hl ipl">$8</span><span class="hl str">^2)}'</span>
+	<span class="hl kwc">paste</span> DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_b_<span class="hl kwd">$tb</span> DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_u_<span class="hl kwd">$tu</span> \
+	| <span class="hl kwc">awk</span> <span class="hl str">'{printf &quot; DG_ff_J= %6.1f%6.1f &quot;,</span><span class="hl ipl">$4</span><span class="hl str">-</span><span class="hl ipl">$9</span><span class="hl str">,sqrt(</span><span class="hl ipl">$5</span><span class="hl str">^2+</span><span class="hl ipl">$10</span><span class="hl str">^2)}'</span>
+	<span class="hl kwb">printf</span> <span class="hl str">&quot; sig_AB_u= %5.2f&quot;</span> <span class="hl str">`cat SAB.u`</span> 
+	<span class="hl kwb">printf</span> <span class="hl str">&quot; sig_AB_b= %5.2f&quot;</span> <span class="hl str">`cat SAB.b`</span> 
+	<span class="hl kwb">printf</span> <span class="hl str">&quot; ADT_AB_u= %5.2f&quot;</span> <span class="hl str">`cat AAB.u`</span>
+	<span class="hl kwb">printf</span> <span class="hl str">&quot; ADT_AB_b= %5.2f&quot;</span> <span class="hl str">`cat AAB.b`</span>
+    <span class="hl kwa">fi</span>
+    <span class="hl slc"># rr </span>
+    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>s DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_b_<span class="hl kwd">$tb</span> <span class="hl opt">-</span>a <span class="hl opt">-</span>s DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_u_<span class="hl kwd">$tu</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	<span class="hl kwc">paste</span> DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_b_<span class="hl kwd">$tb</span> DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_u_<span class="hl kwd">$tu</span>\
+	| <span class="hl kwc">awk</span> <span class="hl str">'{printf &quot; DG_rr_G= %6.1f%6.1f &quot;,</span><span class="hl ipl">$7</span><span class="hl str">-</span><span class="hl ipl">$2</span><span class="hl str">,sqrt(</span><span class="hl ipl">$3</span><span class="hl str">^2+</span><span class="hl ipl">$8</span><span class="hl str">^2)}'</span>
+	<span class="hl kwc">paste</span> DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_b_<span class="hl kwd">$tb</span> DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_u_<span class="hl kwd">$tu</span>\
+	| <span class="hl kwc">awk</span> <span class="hl str">'{printf &quot; DG_rr_J= %6.1f%6.1f &quot;,</span><span class="hl ipl">$9</span><span class="hl str">-</span><span class="hl ipl">$4</span><span class="hl str">,sqrt(</span><span class="hl ipl">$5</span><span class="hl str">^2+</span><span class="hl ipl">$10</span><span class="hl str">^2)}'</span>
+	<span class="hl kwb">printf</span> <span class="hl str">&quot; sig_BA_u= %5.2f&quot;</span> <span class="hl str">`cat SBA.u`</span> 
+	<span class="hl kwb">printf</span> <span class="hl str">&quot; sig_BA_b= %5.2f&quot;</span> <span class="hl str">`cat SBA.b`</span> 
+	<span class="hl kwb">printf</span> <span class="hl str">&quot; ADT_BA_u= %5.2f&quot;</span> <span class="hl str">`cat ABA.u`</span>
+	<span class="hl kwb">printf</span> <span class="hl str">&quot; ADT_BA_b= %5.2f&quot;</span> <span class="hl str">`cat ABA.b`</span>
+    <span class="hl kwa">fi</span>
+    <span class="hl slc"># now check for vdssb</span>
+    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>s DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_b_<span class="hl kwd">$tb</span> <span class="hl opt">-</span>a <span class="hl opt">-</span>s DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_u_<span class="hl kwd">$tu</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	wab<span class="hl opt">=</span><span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.b.<span class="hl kwd">$tb</span>.wrk
+	wba<span class="hl opt">=</span><span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.u.<span class="hl kwd">$tu</span>.wrk
+	nab<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$wab</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span> 
+	nba<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$wba</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span> 
+	<span class="hl kwc">rm</span> GJ.tmp <span class="hl opt">&gt;&amp;/</span>dev<span class="hl opt">/</span>null
+	<span class="hl slc"># bootstrap loop</span>
+	<span class="hl kwa">for</span> i <span class="hl kwa">in</span> <span class="hl opt">{</span><span class="hl num">1</span>.<span class="hl num">.10</span><span class="hl opt">} ;</span> <span class="hl kwa">do</span>
+	    bs_res.<span class="hl kwc">awk</span> <span class="hl opt">-</span>v seed<span class="hl opt">=</span><span class="hl kwd">$i $wab</span> <span class="hl opt">&gt;</span> ab.tmp
+	    bs_res.<span class="hl kwc">awk</span> <span class="hl opt">-</span>v seed<span class="hl opt">=</span><span class="hl kwd">$i $wba</span> <span class="hl opt">&gt;</span> ba.tmp
+	    <span class="hl kwc">cat</span> ab.tmp ba.tmp  <span class="hl opt">&gt;</span> <span class="hl kwc">file</span>.tmp  <span class="hl slc"># combine bootstrapped files</span>
+	    <span class="hl kwc">awk</span> <span class="hl opt">-</span>v nab<span class="hl opt">=</span><span class="hl kwd">$nab</span> <span class="hl opt">-</span>v nba<span class="hl opt">=</span><span class="hl kwd">$nba</span> <span class="hl str">'\</span>
+<span class="hl str">            {\</span>
+<span class="hl str">             if(NR&lt;=nab)  {wab[NR]=</span><span class="hl ipl">$1</span><span class="hl str">} else {wba[NR-nab]=</span><span class="hl ipl">$1</span><span class="hl str">}\</span>
+<span class="hl str">            }\</span>
+<span class="hl str">            END{\</span>
+<span class="hl str">                for(i=1; i&lt;=nab; i++) {\</span>
+<span class="hl str">                    for(j=1; j&lt;=nba; j++){\</span>
+<span class="hl str">                       print  wab[i]+wba[j]\</span>
+<span class="hl str">                    }\</span>
+<span class="hl str">                }\</span>
+<span class="hl str">          }'</span>	 <span class="hl kwc">file</span>.tmp <span class="hl opt">&gt;</span> vdssb.tmp
+	    free.<span class="hl kwc">awk</span> vdssb.tmp | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$5</span><span class="hl str">,</span><span class="hl ipl">$6</span><span class="hl str">}'</span> <span class="hl opt">&gt;&gt;</span>  GJ.tmp
+	<span class="hl kwa">done</span>
+	<span class="hl slc"># store full vDSSB work</span>
+	<span class="hl kwc">cat</span> <span class="hl kwd">$wab $wba</span> <span class="hl opt">&gt;</span> <span class="hl kwc">file</span>.tmp 
+	<span class="hl kwc">awk</span> <span class="hl opt">-</span>v nab<span class="hl opt">=</span><span class="hl kwd">$nab</span> <span class="hl opt">-</span>v nba<span class="hl opt">=</span><span class="hl kwd">$nba</span> <span class="hl str">'\</span>
+<span class="hl str">            {\</span>
+<span class="hl str">             if(NR&lt;=nab)  {wab[NR]=</span><span class="hl ipl">$1</span><span class="hl str">} else {wba[NR-nab]=</span><span class="hl ipl">$1</span><span class="hl str">}\</span>
+<span class="hl str">            }\</span>
+<span class="hl str">            END{\</span>
+<span class="hl str">                for(i=1; i&lt;=nab; i++) {\</span>
+<span class="hl str">                    for(j=1; j&lt;=nba; j++){\</span>
+<span class="hl str">                       print  wab[i]+wba[j]\</span>
+<span class="hl str">                    }\</span>
+<span class="hl str">                }\</span>
+<span class="hl str">          }'</span>	 <span class="hl kwc">file</span>.tmp <span class="hl opt">&gt;</span> <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$tb</span>.<span class="hl kwd">$tu</span>.vDSSB.wrk
+    <span class="hl kwa">fi</span>
+    <span class="hl kwc">awk</span> <span class="hl str">'{a+=</span><span class="hl ipl">$1</span><span class="hl str">;a2+=</span><span class="hl ipl">$1</span><span class="hl str">^2}END{printf &quot;  DG_fr_G= %6.2f%6.2f&quot;,a/NR-bias,1.96*sqrt(a2/NR-(a/NR)^2)}'</span> GJ.tmp
+    <span class="hl slc"># find theoretical bias</span>
+    npt<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$tb</span><span class="hl str">.</span><span class="hl ipl">$tu</span><span class="hl str">.vDSSB.wrk  | awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>
+    sigma<span class="hl opt">=</span><span class="hl str">`free.awk</span> <span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$tb</span><span class="hl str">.</span><span class="hl ipl">$tu</span><span class="hl str">.vDSSB.wrk | awk '{print sqrt(</span><span class="hl ipl">$2</span><span class="hl str">)}'`</span>
+    gob<span class="hl opt">=</span><span class="hl str">`paste AAB.b ABA.u SAB.b SBA.u | awk '{a=0.5*(</span><span class="hl ipl">$1</span><span class="hl str">+</span><span class="hl ipl">$2</span><span class="hl str">); s=sqrt(</span><span class="hl ipl">$3</span><span class="hl str">^2+</span><span class="hl ipl">$4</span><span class="hl str">^2); if (a &lt; 0.7 &amp;&amp; a &lt; 3.5)  {print 1}else {print 0}}'  `</span>
+    <span class="hl kwa">if</span> <span class="hl opt">[</span> <span class="hl kwd">$gob</span> <span class="hl opt">==</span> <span class="hl num">1</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	bias<span class="hl opt">=</span><span class="hl str">`find_bias.bash</span> <span class="hl ipl">$sigma</span> <span class="hl str"></span><span class="hl ipl">$npt</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>
+    <span class="hl kwa">else</span>
+	bias<span class="hl opt">=</span><span class="hl num">0</span>
+    <span class="hl kwa">fi</span>
+    <span class="hl kwc">awk</span> <span class="hl opt">-</span>v bias<span class="hl opt">=</span><span class="hl kwd">$bias</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">;a2+=</span><span class="hl ipl">$2</span><span class="hl str">^2}END{printf &quot;  DG_fr_J= %6.2f%6.2f&quot;,a/NR-bias,1.96*sqrt(a2/NR-(a/NR)^2)}'</span> GJ.tmp
+    <span class="hl kwb">printf</span> <span class="hl str">&quot; bias_fr= %4.1f&quot;</span> <span class="hl kwd">$bias</span> 
+    <span class="hl kwc">rm</span> JG.tmp <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>s DG<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_b_<span class="hl kwd">$tb</span> <span class="hl opt">-</span>a <span class="hl opt">-</span>s DG<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_u_<span class="hl kwd">$tu</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	wab<span class="hl opt">=</span><span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.b.<span class="hl kwd">$tb</span>.wrk
+	wba<span class="hl opt">=</span><span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.u.<span class="hl kwd">$tu</span>.wrk
+	nab<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$wab</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span> 
+	nba<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$wba</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span> 
+	<span class="hl kwc">rm</span> jar.tmp <span class="hl opt">&gt;&amp;/</span>dev<span class="hl opt">/</span>null
+	<span class="hl slc"># bootstrap loop</span>
+	<span class="hl kwa">for</span> i <span class="hl kwa">in</span> <span class="hl opt">{</span><span class="hl num">1</span>.<span class="hl num">.10</span><span class="hl opt">} ;</span> <span class="hl kwa">do</span>
+	    bs_res.<span class="hl kwc">awk</span> <span class="hl opt">-</span>v seed<span class="hl opt">=</span><span class="hl kwd">$i $wab</span> <span class="hl opt">&gt;</span> ab.tmp
+	    bs_res.<span class="hl kwc">awk</span> <span class="hl opt">-</span>v seed<span class="hl opt">=</span><span class="hl kwd">$i $wba</span> <span class="hl opt">&gt;</span> ba.tmp
+	    <span class="hl kwc">cat</span> ab.tmp ba.tmp  <span class="hl opt">&gt;</span> <span class="hl kwc">file</span>.tmp  <span class="hl slc"># combine bootstrapped files</span>
+	    <span class="hl kwc">awk</span> <span class="hl opt">-</span>v nab<span class="hl opt">=</span><span class="hl kwd">$nab</span> <span class="hl opt">-</span>v nba<span class="hl opt">=</span><span class="hl kwd">$nba</span> <span class="hl str">'\</span>
+<span class="hl str">            {\</span>
+<span class="hl str">             if(NR&lt;=nab)  {wab[NR]=</span><span class="hl ipl">$1</span><span class="hl str">} else {wba[NR-nab]=</span><span class="hl ipl">$1</span><span class="hl str">}\</span>
+<span class="hl str">            }\</span>
+<span class="hl str">            END{\</span>
+<span class="hl str">                for(i=1; i&lt;=nab; i++) {\</span>
+<span class="hl str">                    for(j=1; j&lt;=nba; j++){\</span>
+<span class="hl str">                       print  wab[i]+wba[j]\</span>
+<span class="hl str">                    }\</span>
+<span class="hl str">                }\</span>
+<span class="hl str">          }'</span>	 <span class="hl kwc">file</span>.tmp <span class="hl opt">&gt;</span> vdssb.tmp
+	    free.<span class="hl kwc">awk</span> vdssb.tmp | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$5</span><span class="hl str">,</span><span class="hl ipl">$6</span><span class="hl str">}'</span> <span class="hl opt">&gt;&gt;</span>  JG.tmp
+	<span class="hl kwa">done</span>
+	<span class="hl slc"># store full vDSSB work</span>
+	<span class="hl kwc">cat</span> <span class="hl kwd">$wab $wba</span> <span class="hl opt">&gt;</span> <span class="hl kwc">file</span>.tmp 
+	<span class="hl kwc">awk</span> <span class="hl opt">-</span>v nab<span class="hl opt">=</span><span class="hl kwd">$nab</span> <span class="hl opt">-</span>v nba<span class="hl opt">=</span><span class="hl kwd">$nba</span> <span class="hl str">'\</span>
+<span class="hl str">            {\</span>
+<span class="hl str">             if(NR&lt;=nab)  {wab[NR]=</span><span class="hl ipl">$1</span><span class="hl str">} else {wba[NR-nab]=</span><span class="hl ipl">$1</span><span class="hl str">}\</span>
+<span class="hl str">            }\</span>
+<span class="hl str">            END{\</span>
+<span class="hl str">                for(i=1; i&lt;=nab; i++) {\</span>
+<span class="hl str">                    for(j=1; j&lt;=nba; j++){\</span>
+<span class="hl str">                       print  wab[i]+wba[j]\</span>
+<span class="hl str">                    }\</span>
+<span class="hl str">                }\</span>
+<span class="hl str">          }'</span>	 <span class="hl kwc">file</span>.tmp <span class="hl opt">&gt;</span> <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$tb</span>.<span class="hl kwd">$tu</span>.vDSSB.wrk
+    <span class="hl kwa">fi</span>
+    <span class="hl kwc">awk</span> <span class="hl str">'{a+=</span><span class="hl ipl">$1</span><span class="hl str">;a2+=</span><span class="hl ipl">$1</span><span class="hl str">^2}END{printf &quot;  DG_rf_G= %6.2f%6.2f&quot;,-a/NR-bias,1.96*sqrt(a2/NR-(a/NR)^2)}'</span> JG.tmp
+    <span class="hl slc"># find theoretical bias</span>
+    npt<span class="hl opt">=</span><span class="hl str">`wc -l</span> <span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$tb</span><span class="hl str">.</span><span class="hl ipl">$tu</span><span class="hl str">.vDSSB.wrk  | awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>
+    sigma<span class="hl opt">=</span><span class="hl str">`free.awk</span> <span class="hl ipl">$B</span><span class="hl str">.</span><span class="hl ipl">$A</span><span class="hl str">.</span><span class="hl ipl">$tb</span><span class="hl str">.</span><span class="hl ipl">$tu</span><span class="hl str">.vDSSB.wrk | awk '{print sqrt(</span><span class="hl ipl">$2</span><span class="hl str">)}'`</span>
+    gob<span class="hl opt">=</span><span class="hl str">`paste ABA.b AAB.u SBA.b SAB.u | awk '{a=0.5*(</span><span class="hl ipl">$1</span><span class="hl str">+</span><span class="hl ipl">$2</span><span class="hl str">); s=sqrt(</span><span class="hl ipl">$3</span><span class="hl str">^2+</span><span class="hl ipl">$4</span><span class="hl str">^2); if (a &lt; 0.7 &amp;&amp; a &lt; 3.5)  {print 1}else {print 0}}'  `</span>
+    <span class="hl kwa">if</span> <span class="hl opt">[</span> <span class="hl kwd">$gob</span> <span class="hl opt">==</span> <span class="hl num">1</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	bias<span class="hl opt">=</span><span class="hl str">`find_bias.bash</span> <span class="hl ipl">$sigma</span> <span class="hl str"></span><span class="hl ipl">$npt</span> <span class="hl str">| awk '{print</span> <span class="hl ipl">$1</span><span class="hl str">}'`</span>
+    <span class="hl kwa">else</span>
+	bias<span class="hl opt">=</span><span class="hl num">0</span>
+    <span class="hl kwa">fi</span>
+    <span class="hl kwc">awk</span> <span class="hl opt">-</span>v bias<span class="hl opt">=</span><span class="hl kwd">$bias</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">;a2+=</span><span class="hl ipl">$2</span><span class="hl str">^2}END{printf &quot;  DG_rf_J= %6.2f%6.2f&quot;,-a/NR-bias,1.96*sqrt(a2/NR-(a/NR)^2)}'</span> JG.tmp
+    <span class="hl kwb">printf</span> <span class="hl str">&quot; bias_rf= %4.1f&quot;</span> <span class="hl kwd">$bias</span> 
+
+    <span class="hl kwc">cp</span> <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$tb</span>.<span class="hl kwd">$tu</span>.vDSSB.wrk works_forward
+    <span class="hl kwc">cp</span> <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$tb</span>.<span class="hl kwd">$tu</span>.vDSSB.wrk works_reverse
+    bennett | <span class="hl kwc">awk</span> <span class="hl str">'{printf &quot; DG_BAR= %6.2f 0.0&quot;,</span><span class="hl ipl">$7</span><span class="hl str">/4.184}'</span> 
+
+    <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$1</span><span class="hl str">/4.184}'</span> <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$tb</span>.<span class="hl kwd">$tu</span>.vDSSB.wrk | histog <span class="hl opt">+</span>i0.2  <span class="hl opt">&gt;</span> <span class="hl kwd">$A</span>.<span class="hl kwd">$B</span>.<span class="hl kwd">$tb</span>.<span class="hl kwd">$tu</span>.vDSSB.hst
+    <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$1</span><span class="hl str">/4.184}'</span> <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$tb</span>.<span class="hl kwd">$tu</span>.vDSSB.wrk | histog <span class="hl opt">+</span>i0.2  <span class="hl opt">&gt;</span> <span class="hl kwd">$B</span>.<span class="hl kwd">$A</span>.<span class="hl kwd">$tb</span>.<span class="hl kwd">$tu</span>.vDSSB.hst
+    
+    <span class="hl kwb">printf</span> <span class="hl str">&quot; tb= %4d&quot;</span> <span class="hl kwd">$tb</span>
+    <span class="hl kwb">printf</span> <span class="hl str">&quot; tu= %4d&quot;</span> <span class="hl kwd">$tu</span>
+    <span class="hl kwb">printf</span> <span class="hl str">&quot;</span><span class="hl esc">\n</span><span class="hl str">&quot;</span>
+<span class="hl opt">}</span>
+
+
+<span class="hl slc"># Compute free energy without processing work files</span>
+<span class="hl kwa">if</span> <span class="hl opt">[</span> <span class="hl kwd">$free</span> <span class="hl opt">=</span> <span class="hl num">1</span> <span class="hl opt">];</span> <span class="hl kwa">then</span>
+    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>d <span class="hl kwd">$dirdata</span> <span class="hl opt">];</span> <span class="hl kwa">then</span>
+	<span class="hl kwb">cd</span> <span class="hl kwd">$dirdata</span>
+	rbfe
+	<span class="hl kwb">exit</span>
+    <span class="hl kwa">else</span>
+	<span class="hl kwb">echo</span> <span class="hl str">&quot;no</span> <span class="hl ipl">$dirdata</span> <span class="hl str">found&quot;</span>
+	<span class="hl kwb">exit</span>
+    <span class="hl kwa">fi</span>
+<span class="hl kwa">fi</span>
+
+dhdl<span class="hl opt">=</span><span class="hl str">&quot;dhdl.xvg&quot;</span>
+
+<span class="hl kwc">rm</span> <span class="hl kwd">$dirdata</span><span class="hl opt">/</span><span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_b_<span class="hl kwd">$tb</span>.wrk <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwc">rm</span> <span class="hl kwd">$dirdata</span><span class="hl opt">/</span><span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_b_<span class="hl kwd">$tb</span>.wrk <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+ 
+<span class="hl kwa">if</span> <span class="hl opt">[</span> <span class="hl kwd">$bw</span> <span class="hl opt">==</span> <span class="hl num">1</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;Doing bound state ... &quot;</span> <span class="hl kwd">$A</span> <span class="hl str">&quot;-&gt;&quot;</span> <span class="hl kwd">$B</span>
+    <span class="hl kwa">if</span>  <span class="hl opt">[ -</span>d b-<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	<span class="hl kwb">cd</span> b-<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>
+	<span class="hl kwa">for</span> i <span class="hl kwa">in</span> b<span class="hl opt">[</span><span class="hl num">0</span><span class="hl opt">-</span><span class="hl num">9</span><span class="hl opt">]*;</span> <span class="hl kwa">do</span>
+	    <span class="hl kwb">cd</span> <span class="hl kwd">$i</span> <span class="hl opt">;</span>
+	    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>f <span class="hl kwd">$dhdl</span> <span class="hl opt">];</span> <span class="hl kwa">then</span> 
+		dl<span class="hl opt">=</span><span class="hl str">`grep -v -e &quot;[#&#64;]&quot;</span> <span class="hl ipl">$dhdl</span> <span class="hl str">| wc -l | awk '{print dl=1/(</span><span class="hl ipl">$1</span><span class="hl str">-1)}'`</span>
+		<span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl opt">-</span>e <span class="hl str">&quot;[#&#64;]&quot;</span> <span class="hl kwd">$dhdl</span> | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v dl<span class="hl opt">=</span><span class="hl kwd">$dl</span> <span class="hl opt">-</span>v s<span class="hl opt">=</span><span class="hl kwd">$s</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">*dl; print</span> <span class="hl ipl">$1</span><span class="hl str">,s*a}'</span> <span class="hl opt">&gt;</span> <span class="hl kwc">file</span>.wrk
+		<span class="hl kwc">tail</span> <span class="hl opt">-</span><span class="hl num">1</span> <span class="hl kwc">file</span>.wrk | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$2</span><span class="hl str">}'</span><span class="hl opt">&gt;&gt;</span> ..<span class="hl opt">/</span>..<span class="hl opt">/</span><span class="hl kwd">$dirdata</span><span class="hl opt">/</span><span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_b_<span class="hl kwd">$tb</span>.wrk
+	    <span class="hl kwa">else</span>
+		<span class="hl kwb">echo</span> <span class="hl str">&quot;no dhdl file in b-</span><span class="hl ipl">${B}</span><span class="hl str">-</span><span class="hl ipl">${A}</span><span class="hl str">/</span><span class="hl ipl">$i</span> <span class="hl str">directory&quot;</span>
+	    <span class="hl kwa">fi</span>
+	    <span class="hl kwb">cd</span> ..<span class="hl opt">/</span>
+	<span class="hl kwa">done</span>
+	<span class="hl kwb">cd</span> ..<span class="hl opt">/</span>
+    <span class="hl kwa">fi</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;Doing bound state... &quot;</span> <span class="hl kwd">$B</span> <span class="hl str">&quot;-&gt;&quot;</span> <span class="hl kwd">$A</span> 
+    <span class="hl kwa">if</span>  <span class="hl opt">[ -</span>d b-<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	<span class="hl kwb">cd</span> b-<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>
+	<span class="hl kwa">for</span> i <span class="hl kwa">in</span> b<span class="hl opt">[</span><span class="hl num">0</span><span class="hl opt">-</span><span class="hl num">9</span><span class="hl opt">]*;</span> <span class="hl kwa">do</span>
+	    <span class="hl kwb">cd</span> <span class="hl kwd">$i</span> <span class="hl opt">;</span>
+	    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>f <span class="hl kwd">$dhdl</span> <span class="hl opt">];</span> <span class="hl kwa">then</span> 
+		dl<span class="hl opt">=</span><span class="hl str">`grep -v -e &quot;[#&#64;]&quot;</span> <span class="hl ipl">$dhdl</span> <span class="hl str">| wc -l | awk '{print dl=1/(</span><span class="hl ipl">$1</span><span class="hl str">-1)}'`</span>
+		<span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl opt">-</span>e <span class="hl str">&quot;[#&#64;]&quot;</span> <span class="hl kwd">$dhdl</span> | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v dl<span class="hl opt">=</span><span class="hl kwd">$dl</span> <span class="hl opt">-</span>v s<span class="hl opt">=</span><span class="hl kwd">$s</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">*dl; print</span> <span class="hl ipl">$1</span><span class="hl str">,s*a}'</span> <span class="hl opt">&gt;</span> <span class="hl kwc">file</span>.wrk
+		<span class="hl kwc">tail</span> <span class="hl opt">-</span><span class="hl num">1</span> <span class="hl kwc">file</span>.wrk | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$2</span><span class="hl str">}'</span><span class="hl opt">&gt;&gt;</span> ..<span class="hl opt">/</span>..<span class="hl opt">/</span><span class="hl kwd">$dirdata</span><span class="hl opt">/</span><span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_b_<span class="hl kwd">$tb</span>.wrk
+	    <span class="hl kwa">else</span>
+		<span class="hl kwb">echo</span> <span class="hl str">&quot;no dhdl file in b-</span><span class="hl ipl">${B}</span><span class="hl str">-</span><span class="hl ipl">${A}</span><span class="hl str">/</span><span class="hl ipl">$i</span> <span class="hl str">directory&quot;</span>
+	    <span class="hl kwa">fi</span>
+	    <span class="hl kwb">cd</span> ..<span class="hl opt">/</span>
+	<span class="hl kwa">done</span>
+	<span class="hl kwb">cd</span> ..<span class="hl opt">/</span>
+    <span class="hl kwa">fi</span>
+<span class="hl kwa">fi</span>
+
+<span class="hl kwc">rm</span> <span class="hl kwd">$dirdata</span><span class="hl opt">/</span><span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_u_<span class="hl kwd">$tu</span>.wrk <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+<span class="hl kwc">rm</span> <span class="hl kwd">$dirdata</span><span class="hl opt">/</span><span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_u_<span class="hl kwd">$tu</span>.wrk <span class="hl opt">&gt;&amp; /</span>dev<span class="hl opt">/</span>null
+
+<span class="hl kwa">if</span> <span class="hl opt">[</span> <span class="hl kwd">$uw</span> <span class="hl opt">==</span> <span class="hl num">1</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span> 
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;Doing unbound state... &quot;</span> <span class="hl kwd">$A</span> <span class="hl str">&quot;-&gt;&quot;</span> <span class="hl kwd">$B</span>
+    <span class="hl kwa">if</span>  <span class="hl opt">[ -</span>d u-<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	<span class="hl kwb">cd</span> u-<span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>
+	<span class="hl kwa">for</span> i <span class="hl kwa">in</span> u<span class="hl opt">[</span><span class="hl num">0</span><span class="hl opt">-</span><span class="hl num">9</span><span class="hl opt">]*;</span> <span class="hl kwa">do</span>
+	    <span class="hl kwb">cd</span> <span class="hl kwd">$i</span> 
+	    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>f <span class="hl kwd">$dhdl</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+		dl<span class="hl opt">=</span><span class="hl str">`grep -v -e &quot;[#&#64;]&quot;</span> <span class="hl ipl">$dhdl</span> <span class="hl str">| wc -l | awk '{print dl=1/(</span><span class="hl ipl">$1</span><span class="hl str">-1)}'`</span>
+		<span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl opt">-</span>e <span class="hl str">&quot;[#&#64;]&quot;</span> <span class="hl kwd">$dhdl</span> | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v dl<span class="hl opt">=</span><span class="hl kwd">$dl</span> <span class="hl opt">-</span>v s<span class="hl opt">=</span><span class="hl kwd">$s</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">*dl; print</span> <span class="hl ipl">$1</span><span class="hl str">,s*a}'</span> <span class="hl opt">&gt;</span> <span class="hl kwc">file</span>.wrk
+		<span class="hl kwc">tail</span> <span class="hl opt">-</span><span class="hl num">1</span> <span class="hl kwc">file</span>.wrk | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$2</span><span class="hl str">}'</span> <span class="hl opt">&gt;&gt;</span> ..<span class="hl opt">/</span>..<span class="hl opt">/</span><span class="hl kwd">$dirdata</span><span class="hl opt">/</span><span class="hl kwd">${A}</span><span class="hl opt">-</span><span class="hl kwd">${B}</span>_u_<span class="hl kwd">$tu</span>.wrk
+	    <span class="hl kwa">else</span>
+		<span class="hl kwb">echo</span> <span class="hl str">&quot;no dhdl file in u-</span><span class="hl ipl">${A}</span><span class="hl str">-</span><span class="hl ipl">${B}</span><span class="hl str">/</span><span class="hl ipl">$i</span> <span class="hl str">directory&quot;</span>
+	    <span class="hl kwa">fi</span>
+	    <span class="hl kwb">cd</span> ..<span class="hl opt">/</span>
+	<span class="hl kwa">done</span>
+	<span class="hl kwb">cd</span> ..<span class="hl opt">/</span>
+    <span class="hl kwa">fi</span>
+    <span class="hl kwb">echo</span> <span class="hl str">&quot;Doing unbound state... &quot;</span> <span class="hl kwd">$B</span> <span class="hl str">&quot;-&gt;&quot;</span> <span class="hl kwd">$A</span>
+    <span class="hl kwa">if</span>  <span class="hl opt">[ -</span>d u-<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+	<span class="hl kwb">cd</span> u-<span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>
+	<span class="hl kwa">for</span> i <span class="hl kwa">in</span> u<span class="hl opt">[</span><span class="hl num">0</span><span class="hl opt">-</span><span class="hl num">9</span><span class="hl opt">]*;</span> <span class="hl kwa">do</span>
+	    <span class="hl kwb">cd</span> <span class="hl kwd">$i</span> 
+	    <span class="hl kwa">if</span> <span class="hl opt">[ -</span>f <span class="hl kwd">$dhdl</span> <span class="hl opt">] ;</span> <span class="hl kwa">then</span>
+		dl<span class="hl opt">=</span><span class="hl str">`grep -v -e &quot;[#&#64;]&quot;</span> <span class="hl ipl">$dhdl</span> <span class="hl str">| wc -l | awk '{print dl=1/(</span><span class="hl ipl">$1</span><span class="hl str">-1)}'`</span>
+		<span class="hl kwc">grep</span> <span class="hl opt">-</span>v <span class="hl opt">-</span>e <span class="hl str">&quot;[#&#64;]&quot;</span> <span class="hl kwd">$dhdl</span> | <span class="hl kwc">awk</span> <span class="hl opt">-</span>v dl<span class="hl opt">=</span><span class="hl kwd">$dl</span> <span class="hl opt">-</span>v s<span class="hl opt">=</span><span class="hl kwd">$s</span> <span class="hl str">'{a+=</span><span class="hl ipl">$2</span><span class="hl str">*dl; print</span> <span class="hl ipl">$1</span><span class="hl str">,s*a}'</span> <span class="hl opt">&gt;</span> <span class="hl kwc">file</span>.wrk
+		<span class="hl kwc">tail</span> <span class="hl opt">-</span><span class="hl num">1</span> <span class="hl kwc">file</span>.wrk | <span class="hl kwc">awk</span> <span class="hl str">'{print</span> <span class="hl ipl">$2</span><span class="hl str">}'</span> <span class="hl opt">&gt;&gt;</span> ..<span class="hl opt">/</span>..<span class="hl opt">/</span><span class="hl kwd">$dirdata</span><span class="hl opt">/</span><span class="hl kwd">${B}</span><span class="hl opt">-</span><span class="hl kwd">${A}</span>_u_<span class="hl kwd">$tu</span>.wrk
+	    <span class="hl kwa">else</span>
+		<span class="hl kwb">echo</span> <span class="hl str">&quot;no dhdl file in u-</span><span class="hl ipl">${B}</span><span class="hl str">-</span><span class="hl ipl">${A}</span><span class="hl str">/</span><span class="hl ipl">$i</span> <span class="hl str">directory&quot;</span>
+	    <span class="hl kwa">fi</span>
+	    <span class="hl kwb">cd</span> ..<span class="hl opt">/</span>
+	<span class="hl kwa">done</span>
+	<span class="hl kwb">cd</span> ..<span class="hl opt">/</span>
+    <span class="hl kwa">fi</span>
+<span class="hl kwa">fi</span>
+
+<span class="hl kwb">exit</span> 
+</pre>
+</body>
+</html>
+<!--HTML generated by highlight 3.18, http://www.andre-simon.de/-->
