@@ -27,22 +27,6 @@
 
 <!-- Setup Google Analytics -->
 
-.blink {
-  animation: blink 1s steps(1, end) infinite;
-}
-
-@keyframes blink {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 
 <!-- You can set your favicon here -->
 <!-- link rel="shortcut icon" type="image/x-icon" href="/vdssb_gromacs/favicon.ico" -->
@@ -239,7 +223,6 @@ to the dissipation of the processes and ultimately to the uncertainty
 on the estimates.</p>
 
 <h3> <p style="color:#FF6347";> NE-RDFE in a (unix) nutshell</p>  </h3> 
-<br> 
 In the following we provide the full sequence of the commands to compute a NE-RDFE on the M100 HPC system: 
 <pre>
   unzip NE-RDFE.zip
@@ -258,6 +241,8 @@ In the following we provide the full sequence of the commands to compute a NE-RD
   make_submit_slr.bash 31
   sbatch submit.slr
   cd ../
- <p> <span class="blink"> ... Wait for HPC Jobs to Finish ... </span></p>
+   <div class='line'>
+    <h2 class='flipY'> ... Wait for HPC Jobs to Finish ...</h2>
+  </div>
   RDFE.bash -b 1000 -u 500 -f g01 g02
   </pre> 
