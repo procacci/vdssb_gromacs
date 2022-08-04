@@ -27,6 +27,15 @@
 
 <!-- Setup Google Analytics -->
 
+.blink {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
 
 <!-- You can set your favicon here -->
 <!-- link rel="shortcut icon" type="image/x-icon" href="/vdssb_gromacs/favicon.ico" -->
@@ -241,8 +250,6 @@ In the following we provide the full sequence of the commands to compute a NE-RD
   make_submit_slr.bash 31
   sbatch submit.slr
   cd ../
-   <div class='line'>
-    <h2 class='flipY'> ... Wait for HPC Jobs to Finish ...</h2>
-  </div>
+   <div class="blink"> ... Wait for HPC Jobs to Finish ... </div>
   RDFE.bash -b 1000 -u 500 -f g01 g02
   </pre> 
