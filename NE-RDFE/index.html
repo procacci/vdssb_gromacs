@@ -140,13 +140,13 @@ submission script for the
    system at CINECA.
 </ul> 
 <li>   From the <code>
-   b-g01-g02 </code> directory issue the commands
+   b-g01-g02 </code> directory issue the commands:
    <pre>
      $ make_submit_slr.bash 50
      $ sbatch submit.slr
     </pre> 
    This will generate and submit the submission script <a href="submitb.html"> <code> submit.slr </code> </a> requesting 50 nodes for
-     a total of 200 GPUs 
+     a total of 200 GPUs. 
 <li>   From the <code>
    u-g01-g02 </code> directory issue the commands
    <pre>
@@ -170,7 +170,7 @@ directory) can be used to evaluate the work from the <code>
 dhdl.xvg </code> files produced in the previous step, as well as to
 compute the corresponding bidirectional estimates of the relative
 dissociation free energy.  The above command will produce the
-following files in a subdirectory named <code> Datarel </code></p>
+following files in a subdirectory named <code> Datarel </code>.</p>
  <pre>
    g01-g02_b_1000.wrk  g01-g02_u_500.wrk  g02-g01_b_1000.wrk  g02-g01_u_500.wrk
   </pre> 
@@ -180,14 +180,14 @@ following files in a subdirectory named <code> Datarel </code></p>
  (1000 ps for the bound state and 500 ps for the unbound state).
 These files are all you need to produce your estimate for the RDFE between     
  the pair <b> g01-g02 </b>. From the main directory, re-issue  the <code> RDFE.bash </code>
-command with the option <code> -f </code></p>:
+command with the option <code> -f </code>:</p>
 <pre>
   $ RDFE.bash -b 1000 -u 500 -f g01 g02 
 </pre>
 <p style="text-align:justify">Here, <code> RDFE.bash </code> computes the RDFE for the transition of
 g02 (initially fully coupled) to g01 (initially fully decoupled). For usage
 of the <code> RDFE.bash </code> script, just issue the command with no argumets or options.  
-You will get on the standard output a line with something like<./p>
+You will get on the standard output a line with something like</p>
 <pre>
 Dir=Datarel  Sign=1  Time_u=500  Time_b=1000  xs =3.3
 g02->g01   DG_bar=   -4.71   0.41  DG_ff_G=   -5.4   0.8  DG_ff_J=   -4.7   0.4  sig_AB_u=  0.80 sig_AB_b=  2.12 ADT_AB_u=  0.30 ADT_AB_b=  0.65 DG_rr_G=   -1.8   1.2  DG_rr_J=   -4.3   0.5  sig_BA_u=  1.23 sig_BA_b=  2.96 ADT_BA_u=  3.18 ADT_BA_b=  0.23  DG_fr_G=  -5.85  0.65  DG_fr_J=  -4.45  0.28 bias_fr=  0.0  DG_rf_G=  -1.50  1.14  DG_rf_J=  -5.53  0.55 bias_rf=  0.9 DG_BAR=  -4.61 0.0 tb= 1000 tu=  500
@@ -243,6 +243,6 @@ In the following we provide the full sequence of the commands to compute a NE-RD
   make_submit_slr.bash 31
   sbatch submit.slr
   cd ../
- # wait for HPC jobs to finish
+ <blink> ... Wait for HPC Jobs to Finish ... </blink>
   RDFE.bash -b 1000 -u 500 -f g01 g02
   </pre> 
