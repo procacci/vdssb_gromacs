@@ -1,5 +1,5 @@
 # <center> <p style="text-align:justify"> Tutorial for relative dissociation free energy calculations in GROMACS between dissimilar molecules using bidirectional non-equilibrium dual topology scheme </p> </center>
-<center> <img src="FSDAMgromacs.png" alt="vDSSB in GROMACS" width="600" height="323"></center> <br>
+<center> <img src="ne-rbfe.png" alt="vDSSB in GROMACS" width="600" height="323"></center> <br>
 <p style="text-align:justify"> his is a technical tutorial for the
 calculation of the relative dissociation free energies (RDFE) for the
 <a href="https://github.com/samplchallenges/SAMPL9/tree/main/host_guest/WP6">
