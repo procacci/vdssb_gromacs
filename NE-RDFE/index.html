@@ -237,7 +237,9 @@ In the following we provide the full sequence of the commands to compute a NE-RD
   unzip NE-RDFE.zip
   cd NE-RDFE
   cd bin
-  source SOURCE_THIS_FILE.bash   
+# activate the scripts
+  source SOURCE_THIS_FILE.bash
+# g02 to g01 transmutation in the b and u states
   cd ../
   make_rbfe_dir.bash g01 g02 b
   make_rbfe_dir.bash g01 g02 u
@@ -250,7 +252,20 @@ In the following we provide the full sequence of the commands to compute a NE-RD
   make_submit_slr.bash 31
   sbatch submit.slr
   cd ../
-   <div class="blink"> ... Wait for HPC Jobs to Finish ... </div>
+# g01 to g02 transmutation in the b and u state
+  make_rbfe_dir.bash g01 g02 b
+  make_rbfe_dir.bash g01 g02 u
+  cd b-g01-g02
+  maketpr.bash
+  make_submit_slr.bash 50
+  sbatch submit.slr
+  cd ../u-g01-g02
+  maketpr.bash 
+  make_submit_slr.bash 31
+  sbatch submit.slr
+  cd ../
+  
+  <div class="blink"> ... Wait for HPC Jobs to Finish ... </div>
   RDFE.bash -b 1000 -u 500 -f g01 g02
   </pre>
 
