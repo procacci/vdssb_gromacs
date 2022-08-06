@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>topol.top</title>
+<link rel="stylesheet" type="text/css" href="highlight.css">
+</head>
+<body class="hl">
+<pre class="hl">[ defaults ]
+; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ
+1               2               yes             0.5     0.8333
+ 
+[ atomtypes ]
+;NAME   AT.NUM  MASS     CHARGE  PTYPE  SIGMA   EPSILON
+c3       6    12.010    0.0000     A  0.3398  0.4510
+c        6    12.010    0.0000     A  0.3315  0.4134
+ca       6    12.010    0.0000     A  0.3315  0.4134
+h1       1     1.008    0.0000     A  0.2422  0.0870
+h2       1     1.008    0.0000     A  0.2244  0.0870
+ha       1     1.008    0.0000     A  0.2625  0.0674
+hc       1     1.008    0.0000     A  0.2600  0.0870
+hn       1     1.008    0.0000     A  0.1106  0.0418
+n4       7    14.010    0.0000     A  0.2500 16.2122
+o        8    16.000    0.0000     A  0.3048  0.6121
+os       8    16.000    0.0000     A  0.3156  0.3038
+DUM_c3   6    12.010    0.0000     A  0.0000  0.0000
+DUM_c    6    12.010    0.0000     A  0.0000  0.0000
+DUM_ca   6    12.010    0.0000     A  0.0000  0.0000
+DUM_h1   1     1.008    0.0000     A  0.0000  0.0000
+DUM_h2   1     1.008    0.0000     A  0.0000  0.0000
+DUM_ha   1     1.008    0.0000     A  0.0000  0.0000
+DUM_hc   1     1.008    0.0000     A  0.0000  0.0000
+DUM_hn   1     1.008    0.0000     A  0.0000  0.0000
+DUM_n4   7    14.010    0.0000     A  0.0000  0.0000
+DUM_o    8    16.000    0.0000     A  0.0000  0.0000
+DUM_os   8    16.000    0.0000     A  0.0000  0.0000
+ OW_opc       8      15.9994  0.0000  A   3.17427e-01  6.8369e-01
+ HW_opc       1       1.0080  0.0000  A   0.00000e+00  0.00000e+00
+
+[ nonbond_params ]
+; i  j    func  sigma           epsilon
+DUM_c3    DUM_c3      1      0.3398    0.4510
+DUM_c3    DUM_c       1      0.3357    0.4318
+DUM_c3    DUM_ca      1      0.3357    0.4318
+DUM_c3    DUM_h1      1      0.2910    0.1981
+DUM_c3    DUM_h2      1      0.2821    0.1981
+DUM_c3    DUM_ha      1      0.3012    0.1743
+DUM_c3    DUM_hc      1      0.2999    0.1981
+DUM_c3    DUM_hn      1      0.2252    0.1373
+DUM_c3    DUM_n4      1      0.2949    2.7040
+DUM_c3    DUM_o       1      0.3223    0.5254
+DUM_c3    DUM_os      1      0.3277    0.3702
+DUM_c     DUM_c       1      0.3315    0.4134
+DUM_c     DUM_ca      1      0.3315    0.4134
+DUM_c     DUM_h1      1      0.2868    0.1896
+DUM_c     DUM_h2      1      0.2780    0.1896
+DUM_c     DUM_ha      1      0.2970    0.1669
+DUM_c     DUM_hc      1      0.2958    0.1896
+DUM_c     DUM_hn      1      0.2211    0.1315
+DUM_c     DUM_n4      1      0.2908    2.5888
+DUM_c     DUM_o       1      0.3182    0.5030
+DUM_c     DUM_os      1      0.3236    0.3544
+DUM_ca    DUM_ca      1      0.3315    0.4134
+DUM_ca    DUM_h1      1      0.2868    0.1896
+DUM_ca    DUM_h2      1      0.2780    0.1896
+DUM_ca    DUM_ha      1      0.2970    0.1669
+DUM_ca    DUM_hc      1      0.2958    0.1896
+DUM_ca    DUM_hn      1      0.2211    0.1315
+DUM_ca    DUM_n4      1      0.2908    2.5888
+DUM_ca    DUM_o       1      0.3182    0.5030
+DUM_ca    DUM_os      1      0.3236    0.3544
+DUM_h1    DUM_h1      1      0.2422    0.0870
+DUM_h1    DUM_h2      1      0.2333    0.0870
+DUM_h1    DUM_ha      1      0.2524    0.0766
+DUM_h1    DUM_hc      1      0.2511    0.0870
+DUM_h1    DUM_hn      1      0.1764    0.0603
+DUM_h1    DUM_n4      1      0.2461    1.1876
+DUM_h1    DUM_o       1      0.2735    0.2308
+DUM_h1    DUM_os      1      0.2789    0.1626
+DUM_h2    DUM_h2      1      0.2244    0.0870
+DUM_h2    DUM_ha      1      0.2434    0.0766
+DUM_h2    DUM_hc      1      0.2422    0.0870
+DUM_h2    DUM_hn      1      0.1675    0.0603
+DUM_h2    DUM_n4      1      0.2372    1.1876
+DUM_h2    DUM_o       1      0.2646    0.2308
+DUM_h2    DUM_os      1      0.2700    0.1626
+DUM_ha    DUM_ha      1      0.2625    0.0674
+DUM_ha    DUM_hc      1      0.2612    0.0766
+DUM_ha    DUM_hn      1      0.1865    0.0531
+DUM_ha    DUM_n4      1      0.2562    1.0453
+DUM_ha    DUM_o       1      0.2837    0.2031
+DUM_ha    DUM_os      1      0.2891    0.1431
+DUM_hc    DUM_hc      1      0.2600    0.0870
+DUM_hc    DUM_hn      1      0.1853    0.0603
+DUM_hc    DUM_n4      1      0.2550    1.1876
+DUM_hc    DUM_o       1      0.2824    0.2308
+DUM_hc    DUM_os      1      0.2878    0.1626
+DUM_hn    DUM_hn      1      0.1106    0.0418
+DUM_hn    DUM_n4      1      0.1803    0.8232
+DUM_hn    DUM_o       1      0.2077    0.1600
+DUM_hn    DUM_os      1      0.2131    0.1127
+DUM_n4    DUM_n4      1      0.2500   16.2122
+DUM_n4    DUM_o       1      0.2774    3.1502
+DUM_n4    DUM_os      1      0.2828    2.2193
+DUM_o     DUM_o       1      0.3048    0.6121
+DUM_o     DUM_os      1      0.3102    0.4312
+DUM_os    DUM_os      1      0.3156    0.3038
+
+
+#include &quot;ghost.itp&quot;
+#include  &quot;coupl.itp&quot;
+#include &quot;wp6.itp&quot;
+#include &quot;opc3.itp&quot;
+
+
+[ system ]
+; Name
+SAMPL9
+
+
+[ molecules ]
+; Compound        #mols
+LNU                1
+UNL                1
+UNK                1
+SOL     1634
+</pre>
+</body>
+</html>
+<!--HTML generated by highlight 3.41, http://www.andre-simon.de/-->
